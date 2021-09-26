@@ -17,7 +17,7 @@ public class HelloWorld {
     private long window;
 
     public void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
+        System.out.println("Hello LWJGL " + Version.getVersion() + "!!!");
 
         init();
         loop();
