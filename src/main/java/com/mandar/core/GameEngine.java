@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 public class GameEngine implements Runnable{
     private final Window window;
-    private final Thread gameLoopThread;
+    //private final Thread gameLoopThread;
 
     private LinkedList<LogicLayer> logicLayers;
 
@@ -20,7 +20,8 @@ public class GameEngine implements Runnable{
     }
 
     public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, LogicLayer... logicLayers) throws Exception{
-        gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
+        //gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
+        this.logicLayers = new LinkedList<>();
 
         window = new Window(windowTitle, windowWidth, windowHeight, vSync);
         this.logicLayers.addAll(Arrays.asList(logicLayers));
@@ -31,14 +32,14 @@ public class GameEngine implements Runnable{
         this.isEngineRunning = true;
     }
 
-    public void start(){
+    /*public void start(){
         gameLoopThread.start();
-    }
+    }*/
 
     @Override
     public void run() {
         try{
-            start();
+            //start();
             init();
             gameLoop();
         } catch (Exception e){
