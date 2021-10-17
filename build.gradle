@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.mandar'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 project.ext.lwjglVersion = "3.2.3"
 project.ext.jomlVersion = "1.10.2"
@@ -12,6 +12,17 @@ project.ext.lwjglNatives = "natives-windows"
 repositories {
     mavenCentral()
 }
+
+sourceSets{
+    main {
+        java {
+            srcDirs = ['src']
+        }
+
+    }
+}
+
+
 
 dependencies {
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
@@ -38,4 +49,6 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-par::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
     implementation "org.joml:joml:${jomlVersion}"
+
+    implementation project(':JLog')
 }

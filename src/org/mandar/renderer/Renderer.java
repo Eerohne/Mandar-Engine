@@ -1,4 +1,4 @@
-package com.mandar.renderer;
+package org.mandar.renderer;
 
 public abstract class Renderer {
 

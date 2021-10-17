@@ -1,4 +1,4 @@
-package com.mandar.core;
+package org.mandar.core;
 
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWErrorCallback;

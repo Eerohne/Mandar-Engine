@@ -1,4 +1,4 @@
-package com.mandar.core;
+package org.mandar.core;
 
 import java.util.Arrays;
 import java.util.LinkedList;

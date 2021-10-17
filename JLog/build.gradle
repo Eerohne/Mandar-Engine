@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'org.jlog'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}

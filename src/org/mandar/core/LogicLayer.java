@@ -1,6 +1,6 @@
-package com.mandar.core;
+package org.mandar.core;
 
-import com.mandar.renderer.Renderer;
+import org.mandar.renderer.Renderer;
 
 public abstract class LogicLayer {
     private int priority;
