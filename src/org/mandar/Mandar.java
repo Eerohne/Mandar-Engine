@@ -1,8 +1,6 @@
 package org.mandar;
 
-import org.jlog.JLog;
-
-import org.mandar.core.Debug;
+import org.mandar.debug.Debug;
 import org.mandar.core.GameEngine;
 
 public class Mandar {
@@ -23,7 +21,7 @@ public class Mandar {
 
         try{
             GameEngine e = new GameEngine(ENGINE_NAME, new GameLogic());
-            int a = 4/0;
+            //int a = 4/0;
             e.run();
         } catch(Exception e){
             Debug.coreError("{0} could not start", ENGINE_NAME);

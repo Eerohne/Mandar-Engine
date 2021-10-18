@@ -1,6 +1,6 @@
 package org.mandar;
 
-import org.mandar.core.LogicLayer;
+import org.mandar.core.logic.LogicLayer;
 
 public class GameLogic extends LogicLayer {
     @Override

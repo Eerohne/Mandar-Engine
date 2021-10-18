@@ -1,4 +1,4 @@
-package org.mandar.core;
+package org.mandar.core.io;
 
 import static org.lwjgl.glfw.GLFW.*;
 

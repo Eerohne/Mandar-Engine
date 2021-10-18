@@ -1,4 +1,4 @@
-package org.mandar.core;
+package org.mandar.debug;
 
 import org.jlog.*;
 public class Debug {

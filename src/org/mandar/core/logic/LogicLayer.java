@@ -1,5 +1,6 @@
-package org.mandar.core;
+package org.mandar.core.logic;
 
+import org.mandar.core.Events;
 import org.mandar.renderer.Renderer;
 
 public abstract class LogicLayer {
