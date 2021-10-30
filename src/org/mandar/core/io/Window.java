@@ -4,10 +4,12 @@ import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 import org.mandar.event.Event;
 import org.mandar.event.IEventListener;
 
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -140,9 +142,14 @@ public class Window {
         if(vSync){
             glfwSwapInterval(1);
         }
+
+        //Gives the window the ability to render using openGL on the current window
+        GL.createCapabilities();
+        GL11.glClearColor(0.5f, 0.0f, 0.12f, 1f);
     }
 
     public void update(){
+        GL11.glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
