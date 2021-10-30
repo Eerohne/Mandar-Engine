@@ -1,4 +1,4 @@
-package org.jlog;
+package org.ssLog;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +34,13 @@ public class Logger {
 
             try {
                 //replace "{i}" by argument object at index i
-                message = message.replaceAll(("\\{" + i + "\\}"), parameters[i].toString());
+                if(parameters[i] instanceof String) {
+                    message = message.replaceAll(("\\{" + i + "\\}"), (String)parameters[i]);
+                }
+                else
+                {
+                    message = message.replaceAll(("\\{" + i + "\\}"), parameters[i].toString());
+                }
                 i++;
 
                 matcher = pattern.matcher(message);
@@ -48,12 +54,13 @@ public class Logger {
             }
 
         }
-        return "["+this.name+"] [" + Thread.currentThread().getStackTrace()[3] + "] " + type + message;
+        //return "["+this.name+"] [" + Thread.currentThread().getStackTrace()[3] + "] " + type + message; [trace removed for the moment]
+        return "["+this.name+"] " + type + message;
     }
 
-    public boolean log(String message, Object... parameters)
+    public boolean log(Object message, Object... parameters)
     {
-        String constructedMessage = constructMessage("",message, parameters);
+        String constructedMessage = constructMessage("", message.toString(), parameters);
 
         if(constructedMessage == null) return false;
 
@@ -61,9 +68,9 @@ public class Logger {
         return true;
     }
 
-    public boolean warn(String message, Object... parameters)
+    public boolean warn(Object message, Object... parameters)
     {
-        String constructedMessage = constructMessage("Warning: ", message, parameters);
+        String constructedMessage = constructMessage("Warning: ",  message.toString(), parameters);
 
         if(constructedMessage == null) return false;
 
@@ -71,9 +78,9 @@ public class Logger {
         return true;
     }
 
-    public boolean error(String message, Object... parameters)
+    public boolean error(Object message, Object... parameters)
     {
-        String constructedMessage = constructMessage("Error: ", message, parameters);
+        String constructedMessage = constructMessage("Error: ",  message.toString(), parameters);
 
         if(constructedMessage == null) return false;
 

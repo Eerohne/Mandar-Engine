@@ -1,5 +1,13 @@
 package org.mandar.core.io;
 
+import java.util.HashMap;
+
+import java.util.HashMap;
+
+import java.util.HashMap;
+
+import java.util.HashMap;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public enum KeyCode {
@@ -55,11 +63,30 @@ public enum KeyCode {
 
     //Setup KeyCode Abstraction
     private final int keyCode;
+
     KeyCode(int keyCode){
         this.keyCode = keyCode;
     }
 
     public int getKeyCode() {
         return keyCode;
+    }
+
+    private static final HashMap<Integer, KeyCode> keycodes = buildKeyMap();
+
+    //gets a key based on it's number
+    public static KeyCode getKey(int keyValue)
+    {
+        return keycodes.get(keyValue);
+    }
+
+    private static HashMap<Integer, KeyCode> buildKeyMap()
+    {
+        HashMap<Integer, KeyCode> map = new HashMap<>();
+        for(KeyCode k: values())
+        {
+            map.put(k.keyCode, k);
+        }
+        return map;
     }
 }

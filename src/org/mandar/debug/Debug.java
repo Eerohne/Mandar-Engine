@@ -1,6 +1,6 @@
 package org.mandar.debug;
 
-import org.jlog.*;
+import org.ssLog.*;
 public class Debug {
 
     private static String coreLoggerName;
@@ -8,23 +8,23 @@ public class Debug {
 
     public static void init()
     {
-        JLog.init();
+        SSLog.init();
         //default names for now
         coreLoggerName = "MANDAR";
         appLoggerName = "APP";
 
-        JLog.addLogger(coreLoggerName);
-        JLog.addLogger(appLoggerName);
+        SSLog.addLogger(coreLoggerName);
+        SSLog.addLogger(appLoggerName);
 
         //JLog.Log_Level l = JLog.Log_Level.LOW;
     }
 
-    public static boolean coreLog(String message, Object... parameters) {return JLog.getLogger(coreLoggerName).log(message, parameters);}
-    public static boolean coreWarn(String message, Object... parameters) {return JLog.getLogger(coreLoggerName).warn(message, parameters);}
-    public static boolean coreError(String message, Object... parameters) {return JLog.getLogger(coreLoggerName).error(message, parameters);}
+    public static boolean coreLog(Object message, Object... parameters) {return SSLog.getLogger(coreLoggerName).log(message, parameters);}
+    public static boolean coreWarn(Object message, Object... parameters) {return SSLog.getLogger(coreLoggerName).warn(message, parameters);}
+    public static boolean coreError(Object message, Object... parameters) {return SSLog.getLogger(coreLoggerName).error(message, parameters);}
 
-    public static boolean log(String message, Object... parameters) {return JLog.getLogger(appLoggerName).log(message, parameters);}
-    public static boolean warn(String message, Object... parameters) {return JLog.getLogger(appLoggerName).warn(message, parameters);}
-    public static boolean error(String message, Object... parameters) {return JLog.getLogger(appLoggerName).error(message, parameters);}
+    public static boolean log(Object message, Object... parameters) {return SSLog.getLogger(appLoggerName).log(message, parameters);}
+    public static boolean warn(Object message, Object... parameters) {return SSLog.getLogger(appLoggerName).warn(message, parameters);}
+    public static boolean error(Object message, Object... parameters) {return SSLog.getLogger(appLoggerName).error(message, parameters);}
 
 }

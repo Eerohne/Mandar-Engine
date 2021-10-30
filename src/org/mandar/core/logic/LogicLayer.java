@@ -1,27 +1,17 @@
 package org.mandar.core.logic;
 
-import org.mandar.core.Events;
 import org.mandar.renderer.Renderer;
 
 public abstract class LogicLayer {
     private int priority;
 
     protected Renderer renderer;
-    protected Events events;
 
     public abstract void init() throws Exception;
 
     public abstract void update();
 
     public abstract void render();
-
-    public Events getEvents() {
-        return events;
-    }
-
-    public void setEvents(Events events) {
-        this.events = events;
-    }
 
     public Renderer getRenderer() {
         return renderer;

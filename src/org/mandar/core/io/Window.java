@@ -5,6 +5,9 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import org.mandar.event.Event;
+import org.mandar.event.IEventListener;
+
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -17,6 +20,8 @@ public class Window {
     private long window;
 
     private boolean vSync;
+
+    private IEventListener eventListener;
 
     public Window(String title, int width, int height, boolean vSync){
         this.title = title;
@@ -34,6 +39,95 @@ public class Window {
         if(window == NULL){
             throw new RuntimeException("Failed to create Window");
         }
+
+        //***CALLBACKS***//
+
+        //Sets close callback
+        glfwSetWindowCloseCallback(window, (window) -> {
+            glfwSetWindowShouldClose(window,false); //set shouldClose to false, engine should decide that
+
+            if(eventListener != null) {
+                eventListener.onEvent(new Event.WindowCloseEvent());
+            }
+        });
+
+        glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
+            eventListener.onEvent(new Event.WindowResizedEvent(width, height));
+        });
+
+        //Sets focus callback
+        glfwSetWindowFocusCallback(window, (window, focused) -> {
+            if(focused)
+                eventListener.onEvent(new Event.WindowFocusEvent());
+            else
+                eventListener.onEvent(new Event.WindowLostFocusEvent());
+        });
+
+        //Sets moved callback
+        glfwSetWindowPosCallback(window, (window, x, y) -> {
+            eventListener.onEvent(new Event.WindowMovedEvent(x, y));
+        });
+
+        //Sets resize callback
+        glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
+            this.width = width;
+            this.height = height;
+
+            eventListener.onEvent(new Event.WindowResizedEvent(width, height));
+        });
+
+
+        //Sets key callback
+        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+            Event keyEvent = null;
+
+            switch(action)
+            {
+                case GLFW_PRESS:
+                    keyEvent = new Event.KeyPressedEvent(KeyCode.getKey(key), false);
+                    break;
+                case GLFW_REPEAT:
+                    keyEvent = new Event.KeyPressedEvent(KeyCode.getKey(key), true);
+                    break;
+                case GLFW_RELEASE:
+                    keyEvent = new Event.KeyReleasedEvent(KeyCode.getKey(key));
+                    break;
+            }
+            eventListener.onEvent(keyEvent);
+
+        });
+
+        //Sets key typed callback
+        glfwSetCharCallback(window, (window, c) -> {
+            eventListener.onEvent(new Event.KeyTypedEvent(c));
+        });
+
+        //Sets mouse button callback
+        glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
+
+            Event mouseButtonEvent = null;
+
+            switch(action)
+            {
+                case GLFW_PRESS:
+                    mouseButtonEvent = new Event.MouseButtonPressedEvent(KeyCode.getKey(button));
+                    break;
+                case GLFW_RELEASE:
+                    mouseButtonEvent = new Event.MouseButtonReleasedEvent(KeyCode.getKey(button));
+                    break;
+            }
+            eventListener.onEvent(mouseButtonEvent);
+        });
+
+        //Sets mouse moved callback
+        glfwSetCursorPosCallback(window, (window, x, y) -> {
+            eventListener.onEvent(new Event.MouseMovedEvent( (float)x, (float)y) );
+        });
+
+        //Sets mouse scroll callback
+        glfwSetScrollCallback(window, (window, sx, sy) -> {
+            eventListener.onEvent(new Event.MouseScrolledEvent( (float)sx, (float)sy) );
+        });
 
         //Get Resolution of monitor and Center Window
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -83,5 +177,10 @@ public class Window {
 
     public void setvSync(boolean vSync) {
         this.vSync = vSync;
+    }
+
+    public void setEventListener(IEventListener listener)
+    {
+        this.eventListener = listener;
     }
 }

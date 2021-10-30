@@ -1,8 +1,8 @@
-package org.jlog;
+package org.ssLog;
 
 import java.util.HashMap;
 
-public class JLog {
+public class SSLog {
 
     static HashMap<String, Logger> loggers;
 

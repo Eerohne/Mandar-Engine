@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'org.jlog'
+group 'org.ssLog'
 version '1.0'
 
 repositories {
