@@ -1,4 +1,4 @@
-package org.mandar.core.util;
+package org.mandar.core;
 
 public class Time {
 

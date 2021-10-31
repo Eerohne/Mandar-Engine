@@ -1,7 +1,7 @@
-package org.mandar.core.io;
+package org.mandar.core;
 
 import static org.lwjgl.glfw.GLFW.*;
-import org.lwjgl.glfw.GLFWErrorCallback;
+
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -10,7 +10,6 @@ import org.mandar.event.Event;
 import org.mandar.event.IEventListener;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
@@ -53,6 +52,7 @@ public class Window {
             }
         });
 
+        //Sets resized callback
         glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
             eventListener.onEvent(new Event.WindowResizedEvent(width, height));
         });

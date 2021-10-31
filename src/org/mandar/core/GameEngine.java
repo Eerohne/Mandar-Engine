@@ -1,10 +1,5 @@
 package org.mandar.core;
 
-import org.mandar.core.io.Window;
-import org.mandar.core.logic.LogicLayer;
-import org.mandar.core.util.Time;
-
-import org.mandar.Mandar;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
@@ -19,25 +14,25 @@ public class GameEngine implements Runnable, IEventListener {
     private final Window window;
     //private final Thread gameLoopThread;
 
-    private LinkedList<LogicLayer> logicLayers;
+    private LinkedList<Layer> layers;
 
     private boolean isRunning;
 
     private float targetFPS;
     private float updatesPerSec;
 
-    public GameEngine(String windowTitle, LogicLayer gameLogic) throws Exception{
+    public GameEngine(String windowTitle, Layer gameLogic) throws Exception{
         this(windowTitle, 800, 600, 100, 30, true, gameLogic);
     }
 
-    public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, LogicLayer... logicLayers) throws Exception{
+    public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, Layer... layers) throws Exception{
         //gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-        this.logicLayers = new LinkedList<>();
+        this.layers = new LinkedList<>();
 
         window = new Window(windowTitle, windowWidth, windowHeight, vSync);
         window.setEventListener(this);
 
-        this.logicLayers.addAll(Arrays.asList(logicLayers));
+        this.layers.addAll(Arrays.asList(layers));
 
         this.targetFPS = maxFPS;
         this.updatesPerSec = maxUpdates;
@@ -61,7 +56,7 @@ public class GameEngine implements Runnable, IEventListener {
     private void init() throws Exception{
         window.init();
         Time.init();
-        for (LogicLayer layer : this.logicLayers) {
+        for (Layer layer : this.layers) {
             layer.init();
         }
     }
@@ -87,13 +82,13 @@ public class GameEngine implements Runnable, IEventListener {
     }
 
     private void update(){
-        for (LogicLayer layer : this.logicLayers) {
+        for (Layer layer : this.layers) {
             layer.update();
         }
     }
 
     private void render(){
-        for (LogicLayer layer : this.logicLayers) {
+        for (Layer layer : this.layers) {
             layer.render();
         }
         window.update();

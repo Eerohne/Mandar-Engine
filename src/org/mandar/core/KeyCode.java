@@ -1,10 +1,4 @@
-package org.mandar.core.io;
-
-import java.util.HashMap;
-
-import java.util.HashMap;
-
-import java.util.HashMap;
+package org.mandar.core;
 
 import java.util.HashMap;
 

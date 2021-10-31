@@ -1,7 +1,7 @@
 package org.mandar.event;
 
 
-import org.mandar.core.io.KeyCode;
+import org.mandar.core.KeyCode;
 
 public class Event<T> {
 
