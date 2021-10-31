@@ -52,11 +52,6 @@ public class Window {
             }
         });
 
-        //Sets resized callback
-        glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
-            eventListener.onEvent(new Event.WindowResizedEvent(width, height));
-        });
-
         //Sets focus callback
         glfwSetWindowFocusCallback(window, (window, focused) -> {
             if(focused)
@@ -149,13 +144,10 @@ public class Window {
     }
 
     public void update(){
+        GL11.glClearColor(GameEngine.engine.r, GameEngine.engine.g, GameEngine.engine.b, 1f);
         GL11.glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
-    }
-
-    public boolean windowShouldClose() {
-        return glfwWindowShouldClose(window);
     }
 
     public String getTitle(){
@@ -185,6 +177,8 @@ public class Window {
     public void setvSync(boolean vSync) {
         this.vSync = vSync;
     }
+
+    public long getSystemWindow() { return window; }
 
     public void setEventListener(IEventListener listener)
     {

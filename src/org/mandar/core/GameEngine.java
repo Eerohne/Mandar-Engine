@@ -1,5 +1,6 @@
 package org.mandar.core;
 
+import org.joml.Random;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
@@ -11,8 +12,9 @@ import java.util.LinkedList;
 
 
 public class GameEngine implements Runnable, IEventListener {
+    public static GameEngine engine; //static ref to the engine
+
     private final Window window;
-    //private final Thread gameLoopThread;
 
     private LinkedList<Layer> layers;
 
@@ -26,7 +28,9 @@ public class GameEngine implements Runnable, IEventListener {
     }
 
     public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, Layer... layers) throws Exception{
-        //gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
+
+        engine = this;
+
         this.layers = new LinkedList<>();
 
         window = new Window(windowTitle, windowWidth, windowHeight, vSync);
@@ -81,7 +85,14 @@ public class GameEngine implements Runnable, IEventListener {
         }
     }
 
+        public float r = 0, g =0, b = 0;
+        private Random rand = new Random();
     private void update(){
+
+        r = (float) Input.getMousePosition().x / window.getWidth();
+        g = (float) Input.getMousePosition().y / window.getHeight();
+        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
+
         for (Layer layer : this.layers) {
             layer.update();
         }
@@ -151,7 +162,6 @@ public class GameEngine implements Runnable, IEventListener {
 
     public boolean onMouseButtonPressed(Event.MouseButtonPressedEvent e)
     {
-        Debug.coreLog(e.buttonCode);
         return true;
     }
     public boolean onMouseButtonReleased(Event.MouseButtonReleasedEvent e)
@@ -183,6 +193,8 @@ public class GameEngine implements Runnable, IEventListener {
             }
         }
     }
+
+    public Window getWindow() { return this.window; }
 
 
 }
