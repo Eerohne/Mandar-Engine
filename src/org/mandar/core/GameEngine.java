@@ -148,6 +148,7 @@ public class GameEngine implements Runnable, IEventListener {
 
     public boolean onKeyPressed(Event.KeyPressedEvent e)
     {
+        Debug.coreLog(e.keyCode);
         return true;
     }
     public boolean onKeyReleased(Event.KeyReleasedEvent e)
