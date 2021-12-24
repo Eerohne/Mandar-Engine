@@ -9,6 +9,7 @@ import java.nio.DoubleBuffer;
 
 public class Input {
 
+
     public static boolean isKeyPressed(KeyCode key)
     {
         var window = GameEngine.engine.getWindow().getSystemWindow();
