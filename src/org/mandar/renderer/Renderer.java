@@ -1,5 +1,6 @@
 package org.mandar.renderer;
 
+
 public abstract class Renderer {
 
     abstract void init();

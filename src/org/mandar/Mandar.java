@@ -96,9 +96,6 @@ public class Mandar {
         } catch(Exception e){
             Debug.coreError("{0} could not start", ENGINE_NAME);
         }
-
-        */
-
+*/
     }
-
 }

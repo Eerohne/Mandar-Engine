@@ -3,9 +3,9 @@ package org.mandar.core;
 import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.*;
 
+import org.lwjgl.system.Callback;
 import org.mandar.event.Event;
 import org.mandar.event.IEventListener;
 
@@ -24,16 +24,24 @@ public class Window {
 
     private IEventListener eventListener;
 
-    public Window(String title, int width, int height, boolean vSync){
+    private boolean debugMode = true;
+
+    public Window(String title, int width, int height, boolean vSync, boolean debugMode){
         this.title = title;
         this.width = width;
         this.height = height;
         this.vSync = vSync;
+        this.debugMode = debugMode;
     }
 
     public void init(){
         if(!glfwInit()){
             throw new IllegalStateException("Failed to initialize GLFW");
+        }
+
+        // For debugging purposes
+        if(debugMode){
+            glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         }
 
         this.window = glfwCreateWindow(width,height,title,NULL,NULL);
@@ -126,6 +134,9 @@ public class Window {
             eventListener.onEvent(new Event.MouseScrolledEvent( (float)sx, (float)sy) );
         });
 
+
+
+
         //Get Resolution of monitor and Center Window
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(window, (vidMode.width() - width) / 2, (vidMode.height() - height) / 2);
@@ -140,12 +151,19 @@ public class Window {
 
         //Gives the window the ability to render using openGL on the current window
         GL.createCapabilities();
+
+        // Debug Callback
+        if(debugMode){
+            Callback debugProc = GLUtil.setupDebugMessageCallback();
+        }
+
+
         GL11.glClearColor(0.5f, 0.0f, 0.12f, 1f);
     }
 
     public void update(){
-        GL11.glClearColor(GameEngine.engine.r, GameEngine.engine.g, GameEngine.engine.b, 1f);
-        GL11.glClear(GL_COLOR_BUFFER_BIT);
+//        GL11.glClearColor(GameEngine.engine.r, GameEngine.engine.g, GameEngine.engine.b, 1f);
+//        GL11.glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

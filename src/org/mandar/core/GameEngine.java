@@ -1,14 +1,21 @@
 package org.mandar.core;
 
 import org.joml.Random;
-import org.mandar.debug.Debug;
+import org.lwjgl.BufferUtils;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
 import org.mandar.event.EventType;
 import org.mandar.event.IEventListener;
+import org.mandar.renderer.Shader;
 
+import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
+
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 
 public class GameEngine implements Runnable, IEventListener {
@@ -33,7 +40,7 @@ public class GameEngine implements Runnable, IEventListener {
 
         this.layers = new LinkedList<>();
 
-        window = new Window(windowTitle, windowWidth, windowHeight, vSync);
+        window = new Window(windowTitle, windowWidth, windowHeight, vSync, true);
         window.setEventListener(this);
 
         this.layers.addAll(Arrays.asList(layers));
@@ -49,13 +56,41 @@ public class GameEngine implements Runnable, IEventListener {
     @Override
     public void run() {
         try{
+
+            shader = new Shader("assets/shaders/default.glsl");
+            shader.compile();
+
+            //Create VAO
+            vaoID = glGenVertexArrays();
+            glBindVertexArray(vaoID);
+
+            FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.length);
+            vertexBuffer.put(vertices);
+            vertexBuffer.flip();
+
+            //Create VBO
+            vboID = glGenBuffers();
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+            glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+
             gameLoop();
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
+    float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f,  0.5f, 0.0f
+    };
 
+    int vaoID, vboID;
+
+    Shader shader = null;
 
     private void init() throws Exception{
         window.init();
@@ -63,6 +98,7 @@ public class GameEngine implements Runnable, IEventListener {
         for (Layer layer : this.layers) {
             layer.init();
         }
+
     }
 
     private void gameLoop(){
@@ -85,13 +121,13 @@ public class GameEngine implements Runnable, IEventListener {
         }
     }
 
-        public float r = 0, g =0, b = 0;
-        private Random rand = new Random();
-    private void update(){
+    public float r = 1, g =0, b = 0;
+    private Random rand = new Random();
 
-        r = (float) Input.getMousePosition().x / window.getWidth();
-        g = (float) Input.getMousePosition().y / window.getHeight();
-        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
+    private void update(){
+//        r = (float) Input.getMousePosition().x / window.getWidth();
+//        g = (float) Input.getMousePosition().y / window.getHeight();
+//        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
 
         for (Layer layer : this.layers) {
             layer.update();
@@ -102,6 +138,21 @@ public class GameEngine implements Runnable, IEventListener {
         for (Layer layer : this.layers) {
             layer.render();
         }
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.5f, 0.5f, 0.5f ,1);
+
+        shader.use();
+
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glBindVertexArray(vaoID);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDisableVertexAttribArray(0);
+
+        shader.detach();
+
         window.update();
     }
 
@@ -124,8 +175,7 @@ public class GameEngine implements Runnable, IEventListener {
         dispatcher.dispatch(EventType.MouseScrolled, this::onMouseScrolled);
     }
 
-    public boolean onWindowClosed(Event.WindowCloseEvent e)
-    {
+    public boolean onWindowClosed(Event.WindowCloseEvent e) {
         isRunning = false;
         return true;
     }
@@ -135,8 +185,7 @@ public class GameEngine implements Runnable, IEventListener {
     {
         return true;
     }
-    public boolean onWindowLostFocused(Event.WindowLostFocusEvent e)
-    {
+    public boolean onWindowLostFocused(Event.WindowLostFocusEvent e) {
         //Debug.coreLog(e);
         return true;
     }
@@ -155,8 +204,7 @@ public class GameEngine implements Runnable, IEventListener {
     {
         return true;
     }
-    public boolean onKeyTyped(Event.KeyTypedEvent e)
-    {
+    public boolean onKeyTyped(Event.KeyTypedEvent e) {
         //Debug.coreLog(e.keyCode);
         return true;
     }
@@ -165,21 +213,20 @@ public class GameEngine implements Runnable, IEventListener {
     {
         return true;
     }
-    public boolean onMouseButtonReleased(Event.MouseButtonReleasedEvent e)
-    {
+    public boolean onMouseButtonReleased(Event.MouseButtonReleasedEvent e) {
         //Debug.coreLog(e.buttonCode);
         return true;
     }
-    public boolean onMouseMoved(Event.MouseMovedEvent e)
-    {
+    public boolean onMouseMoved(Event.MouseMovedEvent e) {
         //Debug.coreLog("{0}, {1}", e.x, e.y);
         return true;
     }
-    public boolean onMouseScrolled(Event.MouseScrolledEvent e)
-    {
+    public boolean onMouseScrolled(Event.MouseScrolledEvent e) {
         //Debug.coreLog("{0}, {1}", e.scrollX, e.scrollY);
         return true;
     }
+
+    //public boolean
 
     /////*EVENTS*/////
 
@@ -196,6 +243,4 @@ public class GameEngine implements Runnable, IEventListener {
     }
 
     public Window getWindow() { return this.window; }
-
-
 }
