@@ -1,12 +1,13 @@
 package org.mandar;
 
-import org.mandar.Entity.ComponentA;
-import org.mandar.Entity.ComponentB;
-import org.mandar.Entity.Registry;
+import org.mandar.Entity.*;
 import org.mandar.debug.Debug;
 
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Mandar {
 
@@ -32,28 +33,43 @@ public class Mandar {
 
         Registry reg = new Registry();
 
+        View v = new View();
+
         int entity1 = reg.create();
         int entity2 = reg.create();
         int entity3 = reg.create();
         Debug.coreLog("1: {0}, 2: {1}, 3:{2}", entity1, entity2, entity3);
+
+
         reg.addComponent(entity1, new ComponentA(1));
         reg.addComponent(entity1, new ComponentB("Hello"));
 
         reg.addComponent(entity2, new ComponentA(2));
 
-        var entrySet = reg.view(ComponentA.class);
-        for(HashMap.Entry<Integer, ArrayList<Object>> entry : entrySet.entrySet())
+        var view = reg.view(ComponentB.class);
+
+        for(var entry : view.entrySet())
         {
-            Debug.coreLog("- " + entry.getKey());
-            ArrayList<Object> entities = entry.getValue();
-            for(Object entity : entities)
-            {
-                if(entity instanceof ComponentA)
-                    Debug.coreLog( ((ComponentA) entity).id);
-                else if(entity instanceof ComponentB)
-                    Debug.coreLog( ((ComponentB) entity).name);
-            }
+            Debug.coreLog("{0}", entry.getKey());
         }
+
+        /*for(EntityIterator it = view.entityIterator(); it.hasNext();)
+        {
+            EntityEntry entry = it.next();
+            if(entry.getKey().equals(entity1))
+            {
+                Debug.coreLog("entity1 here");
+                for(Iterator<Object> iter = view.componentIterator(entry.getKey()); iter.hasNext();)
+                {
+                    Debug.coreLog(" >{0}", iter.next());
+                }
+            }
+            else if(entry.getKey().equals(entity2))
+            {
+                Debug.coreLog("entity2 here");
+            }
+
+        }*/
 
 
 

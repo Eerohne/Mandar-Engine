@@ -4,13 +4,13 @@ import java.util.*;
 
 public class Registry {
 
-    HashMap<Integer, ArrayList<Object>> registry;
+    View registry;
 
     private Random random;
 
     public Registry()
     {
-        this.registry = new HashMap<>();
+        this.registry = new View();
         random = new Random();
     }
 
@@ -22,6 +22,10 @@ public class Registry {
         return entity;
     }
 
+    public boolean destroy(int entity)
+    {
+        return this.registry.remove(entity) == null ? false : true;
+    }
     public <T> T addComponent(int entity, T component)
     {
         this.registry.get(entity).add(component);
@@ -30,74 +34,26 @@ public class Registry {
 
     public <T> boolean hasComponent(int entity, Class<T> componentType)
     {
-        ArrayList<Object> componentList = this.registry.get(entity);
-        if(componentList == null)
-            return false;
-
-        for(Object component : componentList)
-        {
-            if(component.getClass().equals(componentType))
-                return true;
-        }
-        return false;
+        return this.registry.hasComponent(entity, componentType);
     }
 
     public <T> T getComponent(int entity, Class<T> componentType)
     {
-
-        ArrayList<Object> componentList = this.registry.get(entity);
-        if(componentList == null)
-            return null;
-
-        for(Object component : componentList)
-        {
-            if(component.getClass().equals(componentType))
-                return (T) component;
-        }
-        return null;
+        return this.registry.getComponent(entity, componentType);
     }
 
     public <T> boolean removeComponent(int entity, Class<T> componentType)
     {
-        ArrayList<Object> componentList = this.registry.get(entity);
-        if(componentList == null)
-            return false;
-
-        for(Object component : componentList)
-        {
-            if(component.getClass().equals(componentType)) {
-                componentList.remove(component);
-                return true;
-            }
-        }
-        return false;
+        return this.registry.removeComponent(entity, componentType);
     }
 
     public ArrayList<Object> getComponentList(int entity)
     {
-        return this.registry.get(entity);
+        return this.registry.getComponentList(entity);
     }
 
-    public <T> HashMap<Integer, ArrayList<Object>> view(Class<T> componentType)
+    public <T> View view(Class<T> componentType)
     {
-        var view = (HashMap<Integer, ArrayList<Object>>) registry.clone();
-
-        var mapPairs = view.entrySet();// key and value pairs
-        for(Iterator<Map.Entry<Integer, ArrayList<Object>>> iterator = mapPairs.iterator(); iterator.hasNext();)
-        {
-            boolean found = false;
-            for(Object component : iterator.next().getValue())
-            {
-                if(component.getClass().equals(componentType)) {
-                    found = true;
-                    break;
-                }
-            }
-            if(!found)
-                iterator.remove();
-        }
-
-
-        return view;
+        return this.registry.view(componentType);
     }
 }
