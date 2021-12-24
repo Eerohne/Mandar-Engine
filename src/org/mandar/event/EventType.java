@@ -4,5 +4,6 @@ public enum EventType
 {
     None, WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
     KeyPressed, KeyReleased, KeyTyped,
-    MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+    MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+    GLDebugCallback
 }

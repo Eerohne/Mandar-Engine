@@ -4,8 +4,6 @@ import org.mandar.core.Layer;
 
 public class GameLogic extends Layer {
 
-
-
     @Override
     public void init() throws Exception {
 
