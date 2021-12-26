@@ -1,4 +1,4 @@
-package org.mandar.Entity;
+package org.mandar.Scene.Components;
 
 public class ComponentB {
 

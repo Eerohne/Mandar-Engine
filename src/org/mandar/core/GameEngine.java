@@ -2,6 +2,7 @@ package org.mandar.core;
 
 import org.joml.Random;
 import org.lwjgl.BufferUtils;
+import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
 import org.mandar.event.EventType;
@@ -125,9 +126,9 @@ public class GameEngine implements Runnable, IEventListener {
     private Random rand = new Random();
 
     private void update(){
-//        r = (float) Input.getMousePosition().x / window.getWidth();
-//        g = (float) Input.getMousePosition().y / window.getHeight();
-//        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
+        r = (float) Input.getMousePosition().x / window.getWidth();
+        g = (float) Input.getMousePosition().y / window.getHeight();
+        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
 
         for (Layer layer : this.layers) {
             layer.update();
@@ -140,7 +141,7 @@ public class GameEngine implements Runnable, IEventListener {
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.5f, 0.5f, 0.5f ,1);
+        glClearColor(r, g, b ,1);
 
         shader.use();
 
@@ -151,7 +152,7 @@ public class GameEngine implements Runnable, IEventListener {
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glDisableVertexAttribArray(0);
 
-        shader.detach();
+        //shader.detach();
 
         window.update();
     }

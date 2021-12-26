@@ -1,4 +1,4 @@
-package org.mandar.Entity;
+package org.mandar.Scene;
 
 import java.util.*;
 
@@ -24,12 +24,23 @@ public class Registry {
 
     public boolean destroy(int entity)
     {
-        return this.registry.remove(entity) == null ? false : true;
+        return this.registry.remove(entity) != null;
     }
+
+    public boolean hasEntity(int entity)
+    {
+        return this.registry.hasEntity(entity);
+    }
+
     public <T> T addComponent(int entity, T component)
     {
-        this.registry.get(entity).add(component);
-        return component;
+        //only add component if it doesn't exist
+        if(!this.registry.hasComponent(entity, component.getClass())) {
+            this.registry.get(entity).add(component);
+            return component;
+        }
+        else
+            return null;
     }
 
     public <T> boolean hasComponent(int entity, Class<T> componentType)
@@ -44,7 +55,17 @@ public class Registry {
 
     public <T> boolean removeComponent(int entity, Class<T> componentType)
     {
-        return this.registry.removeComponent(entity, componentType);
+        ArrayList<Object> componentList = this.registry.getComponentList(entity);
+        if(componentList == null)
+            return false;
+
+        for(Object component : componentList)
+        {
+            if(component.getClass().equals(componentType)) {
+                return componentList.remove(component);
+            }
+        }
+        return false;
     }
 
     public ArrayList<Object> getComponentList(int entity)
@@ -52,8 +73,19 @@ public class Registry {
         return this.registry.getComponentList(entity);
     }
 
+    //returns a view of all entities
+    public <T> View view()
+    {
+        return this.registry.view();
+    }
+
     public <T> View view(Class<T> componentType)
     {
         return this.registry.view(componentType);
+    }
+
+    public <T, V> View view(Class<T> componentType1, Class<V> componentType2)
+    {
+        return this.registry.view(componentType1, componentType2);
     }
 }

@@ -1,4 +1,4 @@
-package org.mandar.Entity;
+package org.mandar.Scene;
 
 import java.util.*;
 
@@ -7,6 +7,11 @@ public class View extends HashMap<Integer, ArrayList<Object>>{
     public View()
     {
         super();
+    }
+
+    public boolean hasEntity(int entity)
+    {
+        return this.containsKey(entity);
     }
 
     public <T> boolean hasComponent(int entity, Class<T> componentType)
@@ -38,7 +43,8 @@ public class View extends HashMap<Integer, ArrayList<Object>>{
         return null;
     }
 
-    public <T> boolean removeComponent(int entity, Class<T> componentType)
+    // TODO : remove component should be a registry-only feature, use the register for this
+    /*public <T> boolean removeComponent(int entity, Class<T> componentType)
     {
         ArrayList<Object> componentList = this.get(entity);
         if(componentList == null)
@@ -52,66 +58,55 @@ public class View extends HashMap<Integer, ArrayList<Object>>{
             }
         }
         return false;
-    }
+    }*/
 
     public ArrayList<Object> getComponentList(int entity)
     {
         return this.get(entity);
     }
 
+
+    public <T> View view()
+    {
+        return this;
+    }
+
     public <T> View view(Class<T> componentType)
+    {
+        return this.view(componentType, null);
+    }
+
+    //In the case component2 is given as null, then only component1 will be required
+    public <T, V> View view(Class<T> componentType1, Class<V> componentType2)
     {
         var view = (View) this.clone();
 
-        var mapPairs = view.entrySet();// key and value pairs
-        for(Iterator<Entry<Integer, ArrayList<Object>>> iterator = mapPairs.iterator(); iterator.hasNext();)
+        for(Iterator<Entry<Integer, ArrayList<Object>>> iterator = view.entrySet().iterator(); iterator.hasNext();) //get all entities in view
         {
-            boolean found = false;
+           int componentsFound = 0;
+
             for(Object component : iterator.next().getValue())
             {
-                if(component.getClass().equals(componentType)) {
-                    found = true;
-                    break;
+                if(componentType2 == null) // if component2 is null, then only look for component1
+                {
+                    if (component.getClass().equals(componentType1)) {
+                        componentsFound += 2;
+                        break;
+                    }
+                }
+                else //otherwise, look for both
+                {
+                    if (component.getClass().equals(componentType1) || component.getClass().equals(componentType2)) { //if not null then look for both
+                        componentsFound++;
+                        if(componentsFound == 2)
+                            break;
+                    }
                 }
             }
-            if(!found)
+
+            if(componentsFound < 2)//dismiss if not all required components are present in entity
                 iterator.remove();
         }
-
-
         return view;
     }
-
-    public ArrayList<EntityEntry> getEntries()
-    {
-        ArrayList<EntityEntry> entries = new ArrayList<>();
-        for(Entry<Integer, ArrayList<Object>> entry : this.entrySet())
-        {
-            entries.add((EntityEntry) entry);
-            //this.
-        }
-        return entries;
-    }
-
-
-
-    /*public EntityIterator entityIterator()
-    {
-        Iterator<Map.Entry<Integer, ArrayList<Object>>> a = this.entrySet().iterator();
-        return new EntityIterator(this.entrySet());
-    }*/
-
-    /*public Iterator<Object> componentIterator(int entity)
-    {
-        Iterator<Entry<Integer, ArrayList<Object>>> a;
-        for(Iterator<EntityEntry> entityIterator = this.entrySet().iterator(); entityIterator.hasNext();)
-        {
-            Entry<Integer, ArrayList<Object>> entityEntry = entityIterator.next();
-            if(entityEntry.getKey().equals(entity)) //check if this is the entity
-            {
-                return entityEntry.getValue().iterator(); //return an iterator of it's components
-            }
-        }
-        return null;
-    }*/
 }
