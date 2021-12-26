@@ -1,5 +1,7 @@
 package org.mandar.core;
 
+import org.mandar.debug.Debug;
+
 public class Time {
 
     private static double lastLoopTime;
@@ -13,6 +15,7 @@ public class Time {
 
     public static void update(){
         double currentLoopTime = getSystemTime();
+        //Debug.coreLog("delta Time: {0}", deltaTime);
         deltaTime = (float)(currentLoopTime - lastLoopTime);
         lastLoopTime = currentLoopTime;
     }

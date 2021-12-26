@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.*;
 
 import org.lwjgl.system.Callback;
+import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.IEventListener;
 
@@ -34,7 +35,7 @@ public class Window {
         this.debugMode = debugMode;
     }
 
-    public void init(){
+    public void init(IEventListener listener){
         if(!glfwInit()){
             throw new IllegalStateException("Failed to initialize GLFW");
         }
@@ -50,91 +51,90 @@ public class Window {
         }
 
         //***CALLBACKS***//
+        {
+            setEventListener(listener);
 
-        //Sets close callback
-        glfwSetWindowCloseCallback(window, (window) -> {
-            glfwSetWindowShouldClose(window,false); //set shouldClose to false, engine should decide that
+            //Sets close callback
+            glfwSetWindowCloseCallback(window, (window) -> {
+                glfwSetWindowShouldClose(window, false); //set shouldClose to false, engine should decide that
 
-            if(eventListener != null) {
-                eventListener.onEvent(new Event.WindowCloseEvent());
-            }
-        });
+                if (eventListener != null) {
+                    eventListener.onEvent(new Event.WindowCloseEvent());
+                }
+            });
 
-        //Sets focus callback
-        glfwSetWindowFocusCallback(window, (window, focused) -> {
-            if(focused)
-                eventListener.onEvent(new Event.WindowFocusEvent());
-            else
-                eventListener.onEvent(new Event.WindowLostFocusEvent());
-        });
+            //Sets focus callback
+            glfwSetWindowFocusCallback(window, (window, focused) -> {
+                if (focused)
+                    eventListener.onEvent(new Event.WindowFocusEvent());
+                else
+                    eventListener.onEvent(new Event.WindowLostFocusEvent());
+            });
 
-        //Sets moved callback
-        glfwSetWindowPosCallback(window, (window, x, y) -> {
-            eventListener.onEvent(new Event.WindowMovedEvent(x, y));
-        });
+            //Sets moved callback
+            glfwSetWindowPosCallback(window, (window, x, y) -> {
+                eventListener.onEvent(new Event.WindowMovedEvent(x, y));
+            });
 
-        //Sets resize callback
-        glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
-            this.width = width;
-            this.height = height;
+            //Sets resize callback
+            glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
+                this.width = width;
+                this.height = height;
 
-            eventListener.onEvent(new Event.WindowResizedEvent(width, height));
-        });
-
-
-        //Sets key callback
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            Event keyEvent = null;
-
-            switch(action)
-            {
-                case GLFW_PRESS:
-                    keyEvent = new Event.KeyPressedEvent(KeyCode.getKey(key), false);
-                    break;
-                case GLFW_REPEAT:
-                    keyEvent = new Event.KeyPressedEvent(KeyCode.getKey(key), true);
-                    break;
-                case GLFW_RELEASE:
-                    keyEvent = new Event.KeyReleasedEvent(KeyCode.getKey(key));
-                    break;
-            }
-            eventListener.onEvent(keyEvent);
-
-        });
-
-        //Sets key typed callback
-        glfwSetCharCallback(window, (window, c) -> {
-            eventListener.onEvent(new Event.KeyTypedEvent(c));
-        });
-
-        //Sets mouse button callback
-        glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
-
-            Event mouseButtonEvent = null;
-
-            switch(action)
-            {
-                case GLFW_PRESS:
-                    mouseButtonEvent = new Event.MouseButtonPressedEvent(KeyCode.getKey(button));
-                    break;
-                case GLFW_RELEASE:
-                    mouseButtonEvent = new Event.MouseButtonReleasedEvent(KeyCode.getKey(button));
-                    break;
-            }
-            eventListener.onEvent(mouseButtonEvent);
-        });
-
-        //Sets mouse moved callback
-        glfwSetCursorPosCallback(window, (window, x, y) -> {
-            eventListener.onEvent(new Event.MouseMovedEvent( (float)x, (float)y) );
-        });
-
-        //Sets mouse scroll callback
-        glfwSetScrollCallback(window, (window, sx, sy) -> {
-            eventListener.onEvent(new Event.MouseScrolledEvent( (float)sx, (float)sy) );
-        });
+                eventListener.onEvent(new Event.WindowResizedEvent(width, height));
+            });
 
 
+            //Sets key callback
+            glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+                Event keyEvent = null;
+
+                switch (action) {
+                    case GLFW_PRESS:
+                        keyEvent = new Event.KeyPressedEvent(KeyCode.getKey(key), false);
+                        break;
+                    case GLFW_REPEAT:
+                        keyEvent = new Event.KeyPressedEvent(KeyCode.getKey(key), true);
+                        break;
+                    case GLFW_RELEASE:
+                        keyEvent = new Event.KeyReleasedEvent(KeyCode.getKey(key));
+                        break;
+                }
+                eventListener.onEvent(keyEvent);
+
+            });
+
+            //Sets key typed callback
+            glfwSetCharCallback(window, (window, c) -> {
+                eventListener.onEvent(new Event.KeyTypedEvent(c));
+            });
+
+            //Sets mouse button callback
+            glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
+
+                Event mouseButtonEvent = null;
+
+                switch (action) {
+                    case GLFW_PRESS:
+                        mouseButtonEvent = new Event.MouseButtonPressedEvent(KeyCode.getKey(button));
+                        break;
+                    case GLFW_RELEASE:
+                        mouseButtonEvent = new Event.MouseButtonReleasedEvent(KeyCode.getKey(button));
+                        break;
+                }
+                eventListener.onEvent(mouseButtonEvent);
+            });
+
+            //Sets mouse moved callback
+            glfwSetCursorPosCallback(window, (window, x, y) -> {
+                eventListener.onEvent(new Event.MouseMovedEvent((float) x, (float) y));
+            });
+
+            //Sets mouse scroll callback
+            glfwSetScrollCallback(window, (window, sx, sy) -> {
+                eventListener.onEvent(new Event.MouseScrolledEvent((float) sx, (float) sy));
+            });
+        }
 
 
         //Get Resolution of monitor and Center Window
@@ -144,10 +144,8 @@ public class Window {
         glfwMakeContextCurrent(window);
         glfwShowWindow(window);
 
-        //Enable vsync
-        if(vSync){
-            glfwSwapInterval(1);
-        }
+        //Set vsync
+        glfwSwapInterval(vSync ? 1 : 0);
 
         //Gives the window the ability to render using openGL on the current window
         GL.createCapabilities();

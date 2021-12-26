@@ -1,31 +1,13 @@
 package org.mandar.core;
 
+import org.mandar.event.IEventListener;
 import org.mandar.renderer.Renderer;
 
-public abstract class Layer {
-    private int priority;
+public abstract class Layer implements IEventListener {
 
-    protected Renderer renderer;
+    public abstract void onAttach();
 
-    public abstract void init() throws Exception;
+    public abstract void update(float deltaTime);
 
-    public abstract void update();
-
-    public abstract void render();
-
-    public Renderer getRenderer() {
-        return renderer;
-    }
-
-    public void setRenderer(Renderer renderer) {
-        this.renderer = renderer;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+    public abstract void onDetach();
 }
