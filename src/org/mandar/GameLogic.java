@@ -19,6 +19,8 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+// TODO : GameLogic class is supposed to be inside a runtime project which uses Mandar, but it's here for now for testing
+
 public class GameLogic extends Layer {
 
     float vertices[] = {
@@ -59,7 +61,6 @@ public class GameLogic extends Layer {
 
     @Override
     public void update(float deltaTime) { //OnUpdate
-
         r = (float) Input.getMousePosition().x / GameEngine.engine.getWindow().getWidth();
         g = (float) Input.getMousePosition().y / GameEngine.engine.getWindow().getHeight();
         b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
@@ -79,13 +80,11 @@ public class GameLogic extends Layer {
 
     @Override
     public void onDetach() { //OnExit
-
     }
 
 
     @Override
     public void onEvent(Event e) {
-
         e.handled = true; //mark event as handled, placeholder for now
     }
 }

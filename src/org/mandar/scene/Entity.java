@@ -1,4 +1,4 @@
-package org.mandar.Scene;
+package org.mandar.scene;
 
 import org.mandar.debug.Debug;
 

@@ -1,4 +1,4 @@
-package org.mandar.Scene;
+package org.mandar.scene;
 
 public class Scene {
 
