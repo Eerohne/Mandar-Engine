@@ -1,4 +1,4 @@
-package org.mandar.exceptions;
+package org.mandar.exceptions.window;
 
 public class WindowOutOfContextException extends Exception{
     public WindowOutOfContextException() {

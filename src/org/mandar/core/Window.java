@@ -1,7 +1,7 @@
 package org.mandar.core;
 
 import org.mandar.event.IEventListener;
-import org.mandar.exceptions.WindowOutOfContextException;
+import org.mandar.exceptions.window.WindowOutOfContextException;
 
 public abstract class Window {
     protected String title;

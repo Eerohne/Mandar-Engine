@@ -15,8 +15,6 @@ public class Debug {
 
         SSLog.addLogger(coreLoggerName);
         SSLog.addLogger(appLoggerName);
-
-        //JLog.Log_Level l = JLog.Log_Level.LOW;
     }
 
     public static boolean coreLog(Object message, Object... parameters) {return SSLog.getLogger(coreLoggerName).log(message, parameters);}

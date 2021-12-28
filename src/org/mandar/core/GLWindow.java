@@ -1,5 +1,7 @@
 package org.mandar.core;
 
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLUtil;
 import org.mandar.event.Event;
 import org.mandar.event.IEventListener;
@@ -115,7 +117,23 @@ public class GLWindow extends Window {
                 eventListener.onEvent(new Event.MouseScrolledEvent((float) sx, (float) sy));
             });
         }
-    }
+
+        glfwMakeContextCurrent(window);
+        glfwShowWindow(window);
+
+        //Set vsync
+        glfwSwapInterval(vSync ? 1 : 0);
+
+        //Gives the window the ability to render using openGL on the current window
+        GL.createCapabilities();
+
+        // Debug Callback
+        if(debugMode){
+            GLUtil.setupDebugMessageCallback();
+        }
+
+
+        GL11.glClearColor(0.5f, 0.0f, 0.12f, 1f);    }
 
     @Override
     public void update() {
