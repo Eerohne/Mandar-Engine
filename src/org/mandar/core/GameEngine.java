@@ -31,16 +31,15 @@ public class GameEngine implements Runnable, IEventListener {
     private float targetFPS;
     private float updatesPerSec;
 
-    public GameEngine(String windowTitle, Layer gameLogic) throws Exception{
-        this(windowTitle, 800, 600, 60, 60, false, gameLogic);
+    public GameEngine(String windowTitle, RenderingAPI api, Layer gameLogic) throws Exception{
+        this(windowTitle, 800, 600, 60, 60, false, api, gameLogic);
     }
 
-    public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, Layer... layers) throws Exception{
+    public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, RenderingAPI api, Layer... layers) throws Exception{
 
         engine = this;
 
-
-        window = new Window(windowTitle, windowWidth, windowHeight, vSync, true);
+        window = Window.createWindow(api, windowTitle, windowWidth, windowHeight, vSync, true);
 
         this.layers = new LinkedList<>();
         this.layers.addAll(Arrays.asList(layers));
@@ -115,8 +114,7 @@ public class GameEngine implements Runnable, IEventListener {
     }
 
     //clean up before closing
-    private void shutDown()
-    {
+    private void shutDown() {
         for(Layer layer : layers) //shutdown all layers? May be needed
             layer.onDetach();
     }

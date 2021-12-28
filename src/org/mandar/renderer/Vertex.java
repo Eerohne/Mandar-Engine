@@ -27,7 +27,7 @@ public class Vertex {
         this.col = color;
     }
 
-    public Vector4f getPos() {
+    public Vector4f getPosition() {
         return pos;
     }
 
@@ -41,5 +41,29 @@ public class Vertex {
 
     public float getPosZ(){
         return pos.z();
+    }
+
+    public float getPosW(){
+        return pos.w();
+    }
+
+    public Vector4f getColor() {
+        return col;
+    }
+
+    public float getColorR(){
+        return col.x();
+    }
+
+    public float getColorG(){
+        return col.y();
+    }
+
+    public float getColorB(){
+        return col.z();
+    }
+
+    public float getColorAlpha(){
+        return col.w();
     }
 }

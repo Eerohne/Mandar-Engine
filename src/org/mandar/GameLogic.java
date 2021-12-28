@@ -40,8 +40,8 @@ public class GameLogic extends Layer {
 
         Debug.log("App Initiated");
 
-        shader = new Shader("assets/shaders/default.glsl");
-        shader.compile();
+        //shader = new Shader("assets/shaders/default.glsl");
+        //shader.compile();
 
         //Create VAO
         vaoID = glGenVertexArrays();
@@ -68,7 +68,7 @@ public class GameLogic extends Layer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(r, g, b ,1);
 
-        shader.use();
+        //shader.use();
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
