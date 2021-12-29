@@ -31,7 +31,7 @@ public class GameEngine implements Runnable, IEventListener {
     private float targetFPS;
     private float updatesPerSec;
 
-    public GameEngine(String windowTitle, RenderingAPI api, Layer gameLogic) throws Exception{
+    public GameEngine(String windowTitle, RenderingAPI api, Layer... gameLogic) throws Exception{
         this(windowTitle, 800, 600, 60, 60, false, api, gameLogic);
     }
 

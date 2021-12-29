@@ -19,9 +19,13 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-// TODO : GameLogic class is supposed to be inside a runtime project which uses Mandar, but it's here for now for testing
+import imgui.ImGui;
+import imgui.app.Application;
 
-public class GameLogic extends Layer {
+
+// TODO : TestLayer class is supposed to be inside a runtime project which uses Mandar, but it's here for now for testing
+
+public class TestLayer extends Layer {
 
     float vertices[] = {
             -0.5f, -0.5f, 0.0f,
@@ -61,6 +65,10 @@ public class GameLogic extends Layer {
 
     @Override
     public void update(float deltaTime) { //OnUpdate
+
+
+        //ImGui.text("Hello, World!");
+
         r = (float) Input.getMousePosition().x / GameEngine.engine.getWindow().getWidth();
         g = (float) Input.getMousePosition().y / GameEngine.engine.getWindow().getHeight();
         b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
