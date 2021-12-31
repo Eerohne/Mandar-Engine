@@ -1,21 +1,15 @@
 package org.mandar.core;
 
-import org.joml.Random;
-import org.lwjgl.BufferUtils;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
 import org.mandar.event.EventType;
 import org.mandar.event.IEventListener;
-import org.mandar.renderer.Shader;
+import org.mandar.renderer.RenderingAPI;
 
-import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 

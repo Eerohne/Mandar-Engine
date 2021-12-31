@@ -10,9 +10,9 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class GLWindow extends Window {
+public class OpenGLWindow extends Window {
 
-    public GLWindow(String title, int width, int height, boolean vSync, boolean debugMode) {
+    public OpenGLWindow(String title, int width, int height, boolean vSync, boolean debugMode) {
         super(title, width, height, vSync, debugMode);
     }
 
@@ -133,7 +133,8 @@ public class GLWindow extends Window {
         }
 
 
-        GL11.glClearColor(0.5f, 0.0f, 0.12f, 1f);    }
+        GL11.glClearColor(0.1f, 0.1f, 0.1f, 1f);
+    }
 
     @Override
     public void update() {

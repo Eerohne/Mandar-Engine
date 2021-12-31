@@ -1,7 +1,7 @@
 package org.mandar;
 
 import org.mandar.core.GameEngine;
-import org.mandar.core.RenderingAPI;
+import org.mandar.renderer.RenderingAPI;
 
 
 public class Mandar {

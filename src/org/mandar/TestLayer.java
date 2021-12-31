@@ -11,6 +11,7 @@ import org.mandar.event.Event;
 import org.mandar.renderer.Shader;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
@@ -28,15 +29,17 @@ import imgui.app.Application;
 public class TestLayer extends Layer {
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
+            -0.5f, -0.5f, 0.0f, //1.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, //1.0f, 1.0f, 0.0f,
+             0.0f,  0.5f, 0.0f, //1.0f, 0.0f, 1.0f
     };
+
+    int indices[] = {0,1,2};
 
     Shader shader = null;
     private Random rand = new Random();
 
-    int vaoID, vboID;
+    int vaoID, vboID, eboID;
     public float r = 1, g =0, b = 0;
 
     @Override
@@ -44,8 +47,8 @@ public class TestLayer extends Layer {
 
         Debug.log("App Initiated");
 
-        //shader = new Shader("assets/shaders/default.glsl");
-        //shader.compile();
+        shader = new Shader("assets/shaders/default.glsl");
+        shader.compile();
 
         //Create VAO
         vaoID = glGenVertexArrays();
@@ -60,7 +63,16 @@ public class TestLayer extends Layer {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
 
+        glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+        IntBuffer indexBuffer = BufferUtils.createIntBuffer(indices.length);
+        indexBuffer.put(indices);
+        indexBuffer.flip();
+
+        eboID = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
     }
 
     @Override
@@ -69,21 +81,19 @@ public class TestLayer extends Layer {
 
         //ImGui.text("Hello, World!");
 
-        r = (float) Input.getMousePosition().x / GameEngine.engine.getWindow().getWidth();
-        g = (float) Input.getMousePosition().y / GameEngine.engine.getWindow().getHeight();
-        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
+//        r = (float) Input.getMousePosition().x / GameEngine.engine.getWindow().getWidth();
+//        g = (float) Input.getMousePosition().y / GameEngine.engine.getWindow().getHeight();
+//        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(r, g, b ,1);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);//r, g, b ,1);
 
-        //shader.use();
+        shader.use();
 
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(vaoID);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDisableVertexAttribArray(0);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        //glDisableVertexAttribArray(0);
     }
 
     @Override
