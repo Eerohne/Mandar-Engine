@@ -66,7 +66,7 @@ public class ImGuiLayer extends Layer {
     public void onDetach() {
         ImGuiGl.dispose();
         ImGuiGlfw.dispose();
-        //ImGui.destroyContext();
+        ImGui.destroyContext();
     }
 
     @Override
