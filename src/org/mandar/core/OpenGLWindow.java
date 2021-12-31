@@ -8,6 +8,8 @@ import org.mandar.event.IEventListener;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class OpenGLWindow extends Window {
@@ -26,6 +28,11 @@ public class OpenGLWindow extends Window {
         if(debugMode){
             glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         }
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         this.window = glfwCreateWindow(width,height,title,NULL,NULL);
         if(window == NULL){
@@ -63,8 +70,12 @@ public class OpenGLWindow extends Window {
                 this.width = width;
                 this.height = height;
 
+                glViewport(0, 0, width, height);
+
                 eventListener.onEvent(new Event.WindowResizedEvent(width, height));
             });
+
+
 
 
             //Sets key callback
