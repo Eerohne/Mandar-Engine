@@ -1,5 +1,6 @@
 package org.mandar.core;
 
+import org.mandar.ImGuiLayer;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
@@ -20,6 +21,8 @@ public class GameEngine implements Runnable, IEventListener {
 
     private LinkedList<Layer> layers;
 
+    private ImGuiLayer imGuiLayer;
+
     private boolean isRunning;
 
     private float targetFPS;
@@ -37,6 +40,9 @@ public class GameEngine implements Runnable, IEventListener {
 
         this.layers = new LinkedList<>();
         this.layers.addAll(Arrays.asList(layers));
+
+        imGuiLayer = new ImGuiLayer();
+        this.layers.add(imGuiLayer);
 
         this.targetFPS = maxFPS;
         this.updatesPerSec = maxUpdates;
@@ -76,7 +82,8 @@ public class GameEngine implements Runnable, IEventListener {
             updateTimer += Time.getDeltaTime();
 
             update();
-            render();
+
+            window.update();
 
             /*
             if(true && updateTimer >= 1/updatesPerSec){
@@ -95,10 +102,10 @@ public class GameEngine implements Runnable, IEventListener {
         for(Layer layer : layers)
             layer.update(Time.getDeltaTime());
 
-        window.update();
-    }
-
-    private void render(){
+        imGuiLayer.begin();
+        for(Layer layer : layers)
+            layer.onImGuiRender();
+        imGuiLayer.end();
     }
 
     //ends gameLoop

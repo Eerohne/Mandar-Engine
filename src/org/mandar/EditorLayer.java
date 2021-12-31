@@ -38,16 +38,11 @@ public class EditorLayer extends Layer {
 
     @Override
     public void update(float deltaTime) {
-        impl.newFrame();
-        ImGui.newFrame();
+    }
 
-        ImGui.text("Renderer2D Stats:");
-
-        ImGui.render();
-        gl.renderDrawData(ImGui.getDrawData());
-
-        ImGui.updatePlatformWindows();
-        ImGui.renderPlatformWindowsDefault();
+    public void onImGuiRender()
+    {
+        ImGui.showDemoWindow();
     }
 
     @Override
