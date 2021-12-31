@@ -28,7 +28,7 @@ public class ImGuiLayer extends Layer {
 
 
         GameEngine engine = GameEngine.engine;
-        var window = engine.getWindow().getSystemWindow();
+        long window = engine.getWindow().getSystemWindow();
 
         ImGuiGlfw = new ImGuiImplGlfw();
         ImGuiGlfw.init(window, true);
