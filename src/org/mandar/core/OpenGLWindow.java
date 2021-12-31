@@ -154,6 +154,12 @@ public class OpenGLWindow extends Window {
     }
 
     @Override
+    public void close()
+    {
+        glfwDestroyWindow(window);
+    }
+
+    @Override
     public void setDebugMode(boolean isDebugOn) {
         if(debugMode)
             glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);

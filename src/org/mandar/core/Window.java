@@ -39,6 +39,7 @@ public abstract class Window {
     /*Abstract Methods*/
     public abstract void init(IEventListener listener);
     public abstract void update();
+    public abstract void close();
     public abstract void setDebugMode(boolean isDebugOn);
     public abstract void setTitle(String title);
     public abstract void setWidth(int width);

@@ -118,6 +118,7 @@ public class GameEngine implements Runnable, IEventListener {
     private void shutDown() {
         for(Layer layer : layers) //shutdown all layers? May be needed
             layer.onDetach();
+        this.window.close();
     }
 
     /////*EVENTS*/////

@@ -6,7 +6,10 @@ import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import imgui.internal.ImGui;
 import org.mandar.core.GameEngine;
+import org.mandar.core.Input;
+import org.mandar.core.KeyCode;
 import org.mandar.core.Layer;
+import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 
 public class EditorLayer extends Layer {
@@ -38,11 +41,20 @@ public class EditorLayer extends Layer {
 
     @Override
     public void update(float deltaTime) {
+        if(Input.isKeyPressed(KeyCode.L)) {
+            GameEngine.engine.getWindow().setDebugMode(false);
+            Debug.log("L");
+        }
     }
 
     public void onImGuiRender()
     {
         ImGui.showDemoWindow();
+        ImGui.begin("hello");
+        ImGui.text("a");
+        ImGui.sameLine();
+        ImGui.text("b");
+        ImGui.end();
     }
 
     @Override
