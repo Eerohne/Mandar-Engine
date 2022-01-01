@@ -1,9 +1,6 @@
 package org.mandar;
 
-import imgui.ImGuiIO;
-import imgui.ImGuiStyle;
-import imgui.ImGuiViewport;
-import imgui.ImGuiWindowClass;
+import imgui.*;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiDockNodeFlags;
 import imgui.flag.ImGuiStyleVar;
@@ -13,60 +10,40 @@ import imgui.glfw.ImGuiImplGlfw;
 import imgui.internal.ImGui;
 import imgui.internal.ImGuiDockNode;
 import imgui.type.ImBoolean;
-import org.mandar.core.GameEngine;
-import org.mandar.core.Input;
-import org.mandar.core.KeyCode;
-import org.mandar.core.Layer;
+import org.mandar.core.*;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
+import org.mandar.event.EventDispatcher;
+import org.mandar.event.EventType;
 
 public class EditorLayer extends Layer {
 
     ImGuiImplGlfw impl;
     ImGuiImplGl3 gl;
 
+    boolean viewportFocused = false;
+    boolean viewportHovered = false;
+
+    float time = 0;
+
     @Override
     public void onAttach() {
-        ImGui.createContext();
-        ImGuiIO io = ImGui.getIO();
-
-        io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
-        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
-
-
-        GameEngine engine = GameEngine.engine;
-        var window = engine.getWindow().getSystemWindow();
-
-
-        impl = new ImGuiImplGlfw();
-        impl.init(window, true);
-
-        gl = new ImGuiImplGl3();
-        gl.init("#version 410");
-
-
     }
+
 
     @Override
     public void update(float deltaTime) {
-        if(Input.isKeyPressed(KeyCode.L)) {
-            GameEngine.engine.getWindow().setDebugMode(false);
-            Debug.log("L");
-        }
+
+        GameEngine.engine.getImGuiLayer().blockEvent( !(viewportFocused || viewportHovered) );
     }
 
     public void onImGuiRender()
     {
-        ImGui.showDemoWindow();
-        /*boolean dockspaceOpen = true;
+        boolean dockspaceOpen = true;
         boolean opt_fullscreen_persistant = true;
         boolean opt_fullscreen = opt_fullscreen_persistant;
-        ImGuiDockNode dockspace_flags = new ImGuiDockNode(0);
-        dockspace_flags.addLocalFlags(ImGuiDockNodeFlags.None);
 
-        ImGuiWindowClass window_flags = new ImGuiWindowClass();
-        window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.MenuBar);
-        window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoDocking);
+        int window_flags = ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoDocking;
 
 
         if (opt_fullscreen)
@@ -77,43 +54,54 @@ public class EditorLayer extends Layer {
             ImGui.setNextWindowViewport(viewport.getID());
             ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
             ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
-            window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoTitleBar);
-            window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoCollapse);
-            window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoResize);
-            window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoMove);
-            window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoBringToFrontOnFocus);
-            window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoNavFocus);
+
+            window_flags |= ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove
+                    | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
+
+            window_flags |= ImGuiWindowFlags.NoBackground;
         }
 
-        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-        if (window_flags.hasDockNodeFlagsOverrideSet(ImGuiDockNodeFlags.PassthruCentralNode))
-            window_flags.addDockNodeFlagsOverrideSet(ImGuiWindowFlags.NoBackground);
+        ImGui.begin("DockSpace Demo", new ImBoolean(true), window_flags);
+        ImGui.popStyleVar(2);
 
-        ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 0);
-        ImGui.begin("DockSpace Demo", new ImBoolean(true), window_flags.geClassId());
-        ImGui.popStyleVar();
 
-        if (opt_fullscreen)
-            ImGui.popStyleVar(2);
+        int dockspace_id = ImGui.getID("MyDockSpace");
+        ImGui.dockSpace(dockspace_id);
 
-        ImGuiIO io = ImGui.getIO();
-        ImGuiStyle style = ImGui.getStyle();
-
-        float minWinSizeX = style.getWindowMinSize().x;
-        style.setWindowMinSize(370.0f, 370.0f);
-
-        if (io.hasConfigFlags(ImGuiConfigFlags.DockingEnable))
+        if (ImGui.beginMenuBar())
         {
-            int dockspace_id = ImGui.getID("MyDockSpace");
-            ImGui.dockSpace(dockspace_id, 0, 0, dockspace_flags.getLocalFlags());
+            if (ImGui.beginMenu("File"))
+            {
+                if (ImGui.menuItem("Exit"))
+                    GameEngine.engine.close();
+
+                ImGui.endMenu();
+            }
+
+            ImGui.endMenuBar();
         }
 
-        style.setWindowMinSize(minWinSizeX, minWinSizeX);
+        ImGui.begin("Debug");
+        ImGui.text("fps: " + 1/Time.limitedDeltaTime);
+        time += Time.limitedDeltaTime;
+        ImGui.text("Time: " + (int)time);
+        ImGui.text("Number (Press 'L') : " + GameEngine.engine.number);
+        ImGui.text("Viewport Focused? : " + this.viewportFocused);
+        ImGui.text("Viewport Hovered? : " + this.viewportHovered);
 
-        ImGui.begin("Viewport");
+
         ImGui.end();
-        ImGui.popStyleVar();
-        ImGui.end();*/
+
+        ImGui.begin("ViewPort");
+        viewportFocused = ImGui.isWindowFocused();
+        viewportHovered = ImGui.isWindowHovered();
+        //rendering the image as a viewport here
+        //ImGui.image();
+        ImGui.end();
+
+        //dockspace end
+        ImGui.end();
+
 
 
     }
@@ -126,5 +114,21 @@ public class EditorLayer extends Layer {
     @Override
     public void onEvent(Event e) {
 
+        EventDispatcher dispatcher = new EventDispatcher(e);
+
+        dispatcher.dispatch(EventType.KeyPressed, (n) -> {
+            if(((Event.KeyPressedEvent)e).keyCode == KeyCode.L)
+                GameEngine.engine.number += 1;
+            if(GameEngine.engine.number > 100)
+                GameEngine.engine.number = 0;
+            return true;
+        });
+    }
+
+    private boolean keyPressed(Event.KeyPressedEvent e)
+    {
+        if(!e.repeat)
+            Debug.log("Event");
+        return true;
     }
 }

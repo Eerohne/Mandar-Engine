@@ -103,6 +103,6 @@ public class TestLayer extends Layer {
 
     @Override
     public void onEvent(Event e) {
-        e.handled = true; //mark event as handled, placeholder for now
+         //mark event as handled, placeholder for now
     }
 }

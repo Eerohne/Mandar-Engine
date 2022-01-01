@@ -9,6 +9,7 @@ import org.mandar.event.IEventListener;
 import org.mandar.renderer.RenderingAPI;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
@@ -19,7 +20,7 @@ public class GameEngine implements Runnable, IEventListener {
 
     private final Window window;
 
-    private LinkedList<Layer> layers;
+    private LayerStack layerStack;
 
     private ImGuiLayer imGuiLayer;
 
@@ -28,21 +29,24 @@ public class GameEngine implements Runnable, IEventListener {
     private float targetFPS;
     private float updatesPerSec;
 
+    public float number = 0;
+
     public GameEngine(String windowTitle, RenderingAPI api, Layer... gameLogic) throws Exception{
-        this(windowTitle, 800, 600, 60, 60, false, api, gameLogic);
+        this(windowTitle, 800, 600, 60, 400, false, api, gameLogic);
     }
 
     public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, RenderingAPI api, Layer... layers) throws Exception{
 
         engine = this;
 
-        window = Window.createWindow(api, windowTitle, windowWidth, windowHeight, vSync, true);
+        window = Window.createWindow(api, windowTitle, windowWidth, windowHeight, vSync, false);
 
-        this.layers = new LinkedList<>();
-        this.layers.addAll(Arrays.asList(layers));
+        this.layerStack = new LayerStack();
+        for(Layer l: layers)
+            layerStack.addLayer(l);
 
         imGuiLayer = new ImGuiLayer();
-        this.layers.add(imGuiLayer);
+        this.layerStack.addOverlay(imGuiLayer);
 
         this.targetFPS = maxFPS;
         this.updatesPerSec = maxUpdates;
@@ -66,10 +70,12 @@ public class GameEngine implements Runnable, IEventListener {
         Debug.init();
         Time.init();
 
-        window.init(this);
+        if(window != null)
+            window.init(this);
 
-        for (Layer layer : this.layers) {
-            layer.onAttach();
+        Iterator<Layer> it = layerStack.iterator();
+        while(it.hasNext()) {
+            it.next().onAttach();
         }
 
     }
@@ -79,17 +85,19 @@ public class GameEngine implements Runnable, IEventListener {
 
         while(isRunning){
             Time.update();
-            updateTimer += Time.getDeltaTime();
+            Time.limitedDeltaTime += Time.getDeltaTime();
 
-            update();
 
-            window.update();
 
-            /*
-            if(true && updateTimer >= 1/updatesPerSec){
-                Debug.coreLog(updateTimer);
-                updateTimer = 0f;
-            }*/
+
+            if(Time.limitedDeltaTime >= 1/updatesPerSec) {
+                update();
+                //Debug.coreLog(updateTimer);
+                Time.limitedDeltaTime = 0f;
+            }
+
+            if(window != null)
+                window.update();
 
 
             /*if(!window.isvSync()){
@@ -99,13 +107,20 @@ public class GameEngine implements Runnable, IEventListener {
     }
 
     private void update(){
-        for(Layer layer : layers)
-            layer.update(Time.getDeltaTime());
+        Iterator<Layer> it = layerStack.iterator();
+        while(it.hasNext()) {
+            it.next().update(Time.limitedDeltaTime);
+        }
 
-        imGuiLayer.begin();
-        for(Layer layer : layers)
-            layer.onImGuiRender();
-        imGuiLayer.end();
+        if(GameEngine.engine.getWindow() != null)
+        {
+            imGuiLayer.begin();
+            it = layerStack.iterator();
+            while (it.hasNext()) {
+                it.next().onImGuiRender();
+            }
+            imGuiLayer.end();
+        }
     }
 
     //ends gameLoop
@@ -116,9 +131,12 @@ public class GameEngine implements Runnable, IEventListener {
 
     //clean up before closing
     private void shutDown() {
-        for(Layer layer : layers) //shutdown all layers? May be needed
-            layer.onDetach();
-        this.window.close();
+        Iterator<Layer> it = layerStack.iterator();
+        while(it.hasNext()) {
+            it.next().onDetach();
+        }
+        if(window != null)
+            this.window.close();
     }
 
     /////*EVENTS*/////
@@ -130,10 +148,10 @@ public class GameEngine implements Runnable, IEventListener {
         dispatcher.dispatch(EventType.WindowResize, this::onWindowResized);
 
         //if event wasn't handled yet, then propagate it through the layers
-        for(Layer l : layers)
-        {
+        Iterator<Layer> it = layerStack.reverseIterator();
+        while(it.hasNext()) {
             if(e.handled) break;
-            l.onEvent(e);
+            it.next().onEvent(e);
         }
     }
 
@@ -156,4 +174,5 @@ public class GameEngine implements Runnable, IEventListener {
     }
 
     public Window getWindow() { return this.window; }
+    public ImGuiLayer getImGuiLayer() { return this.imGuiLayer; }
 }

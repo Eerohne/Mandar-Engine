@@ -12,7 +12,7 @@ public class Mandar {
 
         try{
             GameEngine e = new GameEngine(ENGINE_NAME, RenderingAPI.OPENGL, new TestLayer(), new EditorLayer());
-            //GameEngine e = new GameEngine(ENGINE_NAME, RenderingAPI.OPENGL, new EditorLayer());
+            //GameEngine e = new GameEngine(ENGINE_NAME, RenderingAPI.OPENGL, new TestLayer());
             e.run();
         } catch(Exception e){
             //Debug.coreError("{0} could not start", ENGINE_NAME); //<-- can't access the debugger if engine failed u dummy

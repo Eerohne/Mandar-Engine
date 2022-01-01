@@ -6,6 +6,7 @@ import org.mandar.core.KeyCode;
 public class Event<T> {
 
     public EventType type;
+    public EventCategory category;
 
     public boolean handled = false;
 
@@ -21,6 +22,7 @@ public class Event<T> {
         public WindowResizedEvent(int width, int height)
         {
             this.type = EventType.WindowResize;
+            this.category = EventCategory.Window;
             this.width = width;
             this.height = height;
         }
@@ -30,12 +32,14 @@ public class Event<T> {
         public WindowFocusEvent()
         {
             this.type = EventType.WindowFocus;
+            this.category = EventCategory.Window;
         }
     }
     public static class WindowLostFocusEvent extends Event{
         public WindowLostFocusEvent()
         {
             this.type = EventType.WindowLostFocus;
+            this.category = EventCategory.Window;
         }
     }
 
@@ -44,6 +48,7 @@ public class Event<T> {
         public WindowMovedEvent(int x, int y)
         {
             this.type = EventType.WindowMoved;
+            this.category = EventCategory.Window;
             this.x = x;
             this.y = y;
         }
@@ -56,6 +61,7 @@ public class Event<T> {
         public KeyPressedEvent(KeyCode keyCode, boolean repeat)
         {
             this.type = EventType.KeyPressed;
+            this.category = EventCategory.Keyboard;
             this.keyCode = keyCode;
             this.repeat = repeat;
         }
@@ -67,6 +73,7 @@ public class Event<T> {
         public KeyReleasedEvent(KeyCode keyCode)
         {
             this.type = EventType.KeyReleased;
+            this.category = EventCategory.Keyboard;
             this.keyCode = keyCode;
         }
     }
@@ -77,6 +84,7 @@ public class Event<T> {
         public KeyTypedEvent(int keyCode)
         {
             this.type = EventType.KeyTyped;
+            this.category = EventCategory.Keyboard;
             this.keyCode = (char)keyCode;
         }
     }
@@ -87,6 +95,7 @@ public class Event<T> {
         public MouseButtonPressedEvent(KeyCode buttonCode)
         {
             this.type = EventType.MouseButtonPressed;
+            this.category = EventCategory.Mouse;
             this.buttonCode = buttonCode;
         }
     }
@@ -97,6 +106,7 @@ public class Event<T> {
         public MouseButtonReleasedEvent(KeyCode buttonCode)
         {
             this.type = EventType.MouseButtonReleased;
+            this.category = EventCategory.Mouse;
             this.buttonCode = buttonCode;
         }
     }
@@ -108,6 +118,7 @@ public class Event<T> {
         public MouseMovedEvent(float x, float y)
         {
             this.type = EventType.MouseMoved;
+            this.category = EventCategory.Mouse;
             this.x = x;
             this.y = y;
         }
@@ -119,6 +130,7 @@ public class Event<T> {
         public MouseScrolledEvent(float x, float y)
         {
             this.type = EventType.MouseScrolled;
+            this.category = EventCategory.Mouse;
             this.scrollX = x;
             this.scrollY = y;
         }

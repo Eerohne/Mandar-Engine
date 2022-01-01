@@ -8,6 +8,8 @@ public class Time {
 
     private static float deltaTime;
 
+    public static float limitedDeltaTime = 0;
+
     public static void init(){
         lastLoopTime = getSystemTime();
         deltaTime = 0f;
