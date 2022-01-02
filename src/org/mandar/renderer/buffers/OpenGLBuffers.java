@@ -12,8 +12,8 @@ public class OpenGLBuffers extends Buffers{
         return new OpenGLVertexBuffer(buffer);
     }
 
-    public IndexBuffer createOpenGLVertexBuffer(IntBuffer buffer){
-        return new OpenGLIndexBuffer(buffer);
+    public IndexBuffer createOpenGLVertexBuffer(IntBuffer buffer, int count){
+        return new OpenGLIndexBuffer(buffer, count);
     }
 
     public class OpenGLVertexBuffer extends VertexBuffer{
@@ -35,8 +35,9 @@ public class OpenGLBuffers extends Buffers{
     }
 
     public class OpenGLIndexBuffer extends IndexBuffer{
-        public OpenGLIndexBuffer(IntBuffer buffer){
-            indexBufferID = glCreateBuffers();
+        public OpenGLIndexBuffer(IntBuffer buffer, int count){
+            this.indexCount = count;
+            this.indexBufferID = glCreateBuffers();
             this.bind();
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
         }

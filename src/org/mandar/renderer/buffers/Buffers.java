@@ -21,12 +21,12 @@ public abstract class Buffers {
         return null;
     }
 
-    public static IndexBuffer createIndexBuffer(IntBuffer indices){
+    public static IndexBuffer createIndexBuffer(IntBuffer indices, int count){
         switch (Renderer.RENDERER_API){
             case NONE:
                 Debug.coreError("No Renderer API is specified");
             case OPENGL:
-                return new OpenGLBuffers().createOpenGLVertexBuffer(indices);
+                return new OpenGLBuffers().createOpenGLVertexBuffer(indices, count);
         }
 
         Debug.coreError("The Renderer API you are trying to use is not recognized by the engine");
@@ -46,9 +46,14 @@ public abstract class Buffers {
 
     public abstract class IndexBuffer{
         protected int indexBufferID;
+        protected int indexCount;
 
         public int getIndexBufferID() {
             return indexBufferID;
+        }
+
+        public int getCount(){
+            return indexCount;
         }
 
         public abstract void bind();

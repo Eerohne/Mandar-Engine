@@ -24,20 +24,21 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class TestLayer extends Layer {
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f, //1.0f, 0.0f, 0.0f,
-             0.5f, -0.5f, 0.0f, //1.0f, 1.0f, 0.0f,
-             0.0f,  0.5f, 0.0f, //1.0f, 0.0f, 1.0f
+             0.5f, -0.5f, 0.0f, //1.0f, 0.0f, 0.0f,
+            -0.5f,  0.5f, 0.0f, //1.0f, 0.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, //1.0f, 0.0f, 1.0f
+            -0.5f, -0.5f, 0.0f, //1.0f, 1.0f, 0.0f,
     };
 
-    int indices[] = {0,1,2};
+    int indices[] = {2,1,0,0,1,3};
 
     Shader shader = null;
-    private Random rand = new Random();
+    //private Random rand = new Random();
 
     int vaoID;
     Buffers.VertexBuffer vbo;
     Buffers.IndexBuffer ibo;
-    public float r = 1, g =0, b = 0;
+    //public float r = 1, g =0, b = 0;
 
     @Override
     public void onAttach(){ //OnStart
@@ -57,10 +58,6 @@ public class TestLayer extends Layer {
         vertexBuffer.flip();
 
         //Create VBO
-//        vboID = glGenBuffers();
-//        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-//        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
-
         vbo = Buffers.createVertexBuffer(vertexBuffer);
 
         glEnableVertexAttribArray(0);
@@ -70,11 +67,7 @@ public class TestLayer extends Layer {
         indexBuffer.put(indices);
         indexBuffer.flip();
 
-//        eboID = glGenBuffers();
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
-
-        ibo = Buffers.createIndexBuffer(indexBuffer);
+        ibo = Buffers.createIndexBuffer(indexBuffer, indices.length);
     }
 
     @Override
@@ -93,7 +86,7 @@ public class TestLayer extends Layer {
 
 
         glBindVertexArray(vaoID);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_INT, 0);
         //glDisableVertexAttribArray(0);
     }
 
