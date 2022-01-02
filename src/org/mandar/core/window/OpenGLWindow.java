@@ -1,8 +1,9 @@
-package org.mandar.core;
+package org.mandar.core.window;
 
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLUtil;
+import org.mandar.core.KeyCode;
 import org.mandar.event.Event;
 import org.mandar.event.IEventListener;
 

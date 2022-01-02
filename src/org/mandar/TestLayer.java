@@ -2,13 +2,11 @@ package org.mandar;
 
 import org.joml.Random;
 import org.lwjgl.BufferUtils;
-import org.mandar.core.GameEngine;
-import org.mandar.core.Input;
-import org.mandar.core.KeyCode;
 import org.mandar.core.Layer;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
-import org.mandar.renderer.Shader;
+import org.mandar.renderer.buffers.Buffers;
+import org.mandar.renderer.shaders.Shader;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -19,9 +17,6 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-
-import imgui.ImGui;
-import imgui.app.Application;
 
 
 // TODO : TestLayer class is supposed to be inside a runtime project which uses Mandar, but it's here for now for testing
@@ -39,7 +34,9 @@ public class TestLayer extends Layer {
     Shader shader = null;
     private Random rand = new Random();
 
-    int vaoID, vboID, eboID;
+    int vaoID;
+    Buffers.VertexBuffer vbo;
+    Buffers.IndexBuffer ibo;
     public float r = 1, g =0, b = 0;
 
     @Override
@@ -47,8 +44,9 @@ public class TestLayer extends Layer {
 
         Debug.log("App Initiated");
 
-        shader = new Shader("assets/shaders/default.glsl");
+        shader = Shader.create("assets/shaders/default.glsl");
         shader.compile();
+        shader.attach();
 
         //Create VAO
         vaoID = glGenVertexArrays();
@@ -59,9 +57,11 @@ public class TestLayer extends Layer {
         vertexBuffer.flip();
 
         //Create VBO
-        vboID = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+//        vboID = glGenBuffers();
+//        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+//        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+
+        vbo = Buffers.createVertexBuffer(vertexBuffer);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
@@ -70,9 +70,11 @@ public class TestLayer extends Layer {
         indexBuffer.put(indices);
         indexBuffer.flip();
 
-        eboID = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
+//        eboID = glGenBuffers();
+//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
+
+        ibo = Buffers.createIndexBuffer(indexBuffer);
     }
 
     @Override
@@ -88,7 +90,6 @@ public class TestLayer extends Layer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);//r, g, b ,1);
 
-        shader.use();
 
 
         glBindVertexArray(vaoID);

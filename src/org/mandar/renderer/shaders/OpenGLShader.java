@@ -1,6 +1,7 @@
-package org.mandar.renderer;
+package org.mandar.renderer.shaders;
 
 import org.mandar.debug.Debug;
+import org.mandar.renderer.shaders.Shader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,19 +9,33 @@ import java.nio.file.Paths;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glDeleteShader;
 
-public class Shader {
+public class OpenGLShader extends Shader {
     private boolean compiled = false;
 
     private int programID;
     private int vShaderID, fShaderID;
-    private String filePath;
     private String vShaderSrc;
     private String fShaderSrc;
 
-    public Shader(String filePath){
-        this.filePath = filePath;
+    public OpenGLShader(String vertexShaderFilePath, String fragmentShaderFilePath){
+        try {
+            vShaderSrc = new String(Files.readAllBytes(Paths.get(vertexShaderFilePath)));
+        } catch (IOException ioe){
+            Debug.coreError("Could not open shader file: {0}", vertexShaderFilePath);
+            Debug.coreError(ioe.getMessage());
+        }
 
+        try{
+            fShaderSrc = new String(Files.readAllBytes(Paths.get(fragmentShaderFilePath)));
+        } catch (IOException ioe){
+            Debug.coreError("Could not open shader file: {0}", fragmentShaderFilePath);
+            Debug.coreError(ioe.getMessage());
+        }
+    }
+
+    public OpenGLShader(String filePath){
         try{
             String shaderSrc = new String(Files.readAllBytes(Paths.get(filePath)));
             String[] spliSrc = shaderSrc.split("(#type)( )+([a-zA-z]+)");
@@ -83,7 +98,8 @@ public class Shader {
         int isLinkSuccess = glGetProgrami(programID, GL_LINK_STATUS);
         if(isLinkSuccess == GL_FALSE){
             int length = glGetProgrami(programID, GL_INFO_LOG_LENGTH);
-            Debug.coreError("Shader Error: '{0}' Linking Failed: {1}", filePath, glGetProgramInfoLog(programID, length));
+            Debug.coreError("Shader Error: Linking Failed");
+            Debug.coreError(glGetProgramInfoLog(programID, length));
 
             this.delete();
 
@@ -103,7 +119,13 @@ public class Shader {
         int success = glGetShaderi(shader, GL_COMPILE_STATUS);
         if(success == GL_FALSE){
             int length = glGetShaderi(shader, GL_INFO_LOG_LENGTH);
-            Debug.coreError("Shader Error: '{0}' Compilation Failed: {1}", filePath, glGetShaderInfoLog(shader, length));
+            if(type == GL_VERTEX_SHADER){
+                Debug.coreError("Shader Error: Vertex Shader Compilation Failed");
+            }
+            if(type == GL_FRAGMENT_SHADER){
+                Debug.coreError("Shader Error: Fragment Shader Compilation Failed");
+            }
+            Debug.coreError(glGetShaderInfoLog(shader, length));
 
             glDeleteShader(shader);
 
@@ -113,7 +135,7 @@ public class Shader {
         return shader;
     }
 
-    public void use(){
+    public void attach(){
         glUseProgram(programID);
     }
 

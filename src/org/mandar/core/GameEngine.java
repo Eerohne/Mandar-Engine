@@ -1,16 +1,14 @@
 package org.mandar.core;
 
 import org.mandar.ImGuiLayer;
+import org.mandar.core.window.Window;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
 import org.mandar.event.EventType;
 import org.mandar.event.IEventListener;
-import org.mandar.renderer.RenderingAPI;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
@@ -31,15 +29,15 @@ public class GameEngine implements Runnable, IEventListener {
 
     public float number = 0;
 
-    public GameEngine(String windowTitle, RenderingAPI api, Layer... gameLogic) throws Exception{
-        this(windowTitle, 800, 600, 60, 400, false, api, gameLogic);
+    public GameEngine(String windowTitle, Layer... gameLogic) throws Exception{
+        this(windowTitle, 800, 600, 60, 10000, false, gameLogic);
     }
 
-    public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, RenderingAPI api, Layer... layers) throws Exception{
+    public GameEngine(String windowTitle, int windowWidth, int windowHeight, float maxFPS, float maxUpdates, boolean vSync, Layer... layers) throws Exception{
 
         engine = this;
 
-        window = Window.createWindow(api, windowTitle, windowWidth, windowHeight, vSync, false);
+        window = Window.createWindow(windowTitle, windowWidth, windowHeight, vSync, false);
 
         this.layerStack = new LayerStack();
         for(Layer l: layers)

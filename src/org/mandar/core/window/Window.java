@@ -1,8 +1,8 @@
-package org.mandar.core;
+package org.mandar.core.window;
 
 import org.mandar.event.IEventListener;
 import org.mandar.exceptions.window.WindowOutOfContextException;
-import org.mandar.renderer.RenderingAPI;
+import org.mandar.renderer.Renderer;
 
 public abstract class Window {
     protected String title;
@@ -25,8 +25,8 @@ public abstract class Window {
         this.debugMode = debugMode;
     }
 
-    public static Window createWindow(RenderingAPI api, String title, int width, int height, boolean vSync, boolean debugMode) throws WindowOutOfContextException {
-        switch (api){
+    public static Window createWindow(String title, int width, int height, boolean vSync, boolean debugMode) throws WindowOutOfContextException {
+        switch (Renderer.RENDERER_API){
             case NONE:
                 return null;
             case OPENGL:
