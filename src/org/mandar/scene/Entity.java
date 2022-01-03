@@ -46,8 +46,6 @@ public class Entity {
         return this.scene.entityRegistry.removeComponent(entityHandle, componentType);
     }
 
-
-
     public int getHandle()
     {
         return this.entityHandle;

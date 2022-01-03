@@ -1,5 +1,7 @@
 package org.mandar.scene;
 
+import org.mandar.scene.components.ComponentA;
+
 public class Scene {
 
     Registry entityRegistry;
@@ -27,6 +29,15 @@ public class Scene {
 
     public void onUpdate()
     {
+
+        var view = entityRegistry.view(ComponentA.class);
+
+        for(var entry : view.entrySet())
+        {
+            Entity entity = new Entity(entry.getKey(), this);
+            entity.getComponent(ComponentA.class).id = 7;
+
+        }
 
     }
 

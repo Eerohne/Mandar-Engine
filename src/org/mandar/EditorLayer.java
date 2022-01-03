@@ -15,11 +15,17 @@ import org.mandar.debug.Debug;
 import org.mandar.event.Event;
 import org.mandar.event.EventDispatcher;
 import org.mandar.event.EventType;
+import org.mandar.scene.Entity;
+import org.mandar.scene.Scene;
+import org.mandar.scene.components.ComponentA;
+import org.mandar.scene.components.ComponentB;
 
 public class EditorLayer extends Layer {
 
     ImGuiImplGlfw impl;
     ImGuiImplGl3 gl;
+
+    Scene activeScene;
 
     boolean viewportFocused = false;
     boolean viewportHovered = false;
@@ -28,6 +34,8 @@ public class EditorLayer extends Layer {
 
     @Override
     public void onAttach() {
+        activeScene = new Scene();
+
     }
 
 
