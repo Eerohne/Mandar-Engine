@@ -2,7 +2,7 @@ package org.mandar.scene;
 
 import java.util.*;
 
-public class View extends HashMap<Integer, ArrayList<Object>>{
+public class View extends LinkedHashMap<Integer, ArrayList<Object>>{
 
     public View()
     {
@@ -68,7 +68,7 @@ public class View extends HashMap<Integer, ArrayList<Object>>{
 
     public <T> View view()
     {
-        return this;
+        return this.view(null, null);
     }
 
     public <T> View view(Class<T> componentType)
@@ -81,7 +81,11 @@ public class View extends HashMap<Integer, ArrayList<Object>>{
     {
         var view = (View) this.clone();
 
-        for(Iterator<Entry<Integer, ArrayList<Object>>> iterator = view.entrySet().iterator(); iterator.hasNext();) //get all entities in view
+        //if both are null, we are looking for a view of the whole registry (shallow copy)
+        if(componentType1 == null && componentType2 == null)
+            return view;
+
+        for(var iterator = view.entrySet().iterator(); iterator.hasNext();) //get all entities in view
         {
            int componentsFound = 0;
 

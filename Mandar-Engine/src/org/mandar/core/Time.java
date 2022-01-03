@@ -17,7 +17,6 @@ public class Time {
 
     public static void update(){
         double currentLoopTime = getSystemTime();
-        //Debug.coreLog("delta Time: {0}", deltaTime);
         deltaTime = (float)(currentLoopTime - lastLoopTime);
         lastLoopTime = currentLoopTime;
     }

@@ -1,6 +1,7 @@
 package org.mandar.scene;
 
 import org.mandar.scene.components.ComponentA;
+import org.mandar.scene.components.TagComponent;
 
 public class Scene {
 
@@ -13,7 +14,14 @@ public class Scene {
 
     public Entity createEntity()
     {
+        return createEntity(null);
+    }
+
+    public Entity createEntity(String name)
+    {
         Entity entity = new Entity(entityRegistry.create(), this);
+        entity.addComponent(new TagComponent(name));
+
         return entity;
     }
 
@@ -45,4 +53,6 @@ public class Scene {
     {
 
     }
+
+    public Registry getEntityRegistry() {return this.entityRegistry;}
 }

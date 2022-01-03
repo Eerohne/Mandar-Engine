@@ -9,7 +9,7 @@ public class Entity {
 
     private Scene scene;
 
-    Entity(int entityHandle, Scene scene)
+    public Entity(int entityHandle, Scene scene)
     {
         this.entityHandle = entityHandle;
         this.scene = scene;
@@ -49,5 +49,14 @@ public class Entity {
     public int getHandle()
     {
         return this.entityHandle;
+    }
+    public Scene getScene()
+    {
+        return this.scene;
+    }
+
+    public boolean equals(Entity other)
+    {
+        return other != null && this.entityHandle == other.entityHandle && this.scene == other.scene;
     }
 }

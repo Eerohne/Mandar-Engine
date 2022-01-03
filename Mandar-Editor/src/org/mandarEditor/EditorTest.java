@@ -3,7 +3,6 @@ package org.mandarEditor;
 
 import org.mandar.TestLayer;
 import org.mandar.core.GameEngine;
-import org.mandar.debug.Debug;
 
 public class EditorTest {
 
