@@ -1,7 +1,7 @@
 package org.mandar.renderer.shaders;
 
-import org.mandar.exceptions.window.RendererAPINotSupportedException;
-import org.mandar.exceptions.window.ShaderDataTypedDoesNotExistException;
+import org.mandar.exceptions.renderer.RendererAPINotSupportedException;
+import org.mandar.exceptions.renderer.ShaderDataTypedDoesNotExistException;
 import org.mandar.renderer.Renderer;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;

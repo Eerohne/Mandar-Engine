@@ -78,7 +78,7 @@ public class TestLayer extends Layer {
                     index,
                     ShaderDataType.getDataTypeComponentCount(element.getType()),
                     ShaderDataType.getDataTypeValue(element.getType()),
-                    element.isNormalized(),
+                    element.normalize(),
                     vbo.getLayout().getStride(),
                     element.getOffset()
             );

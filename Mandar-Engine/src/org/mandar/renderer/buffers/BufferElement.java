@@ -7,7 +7,7 @@ public class BufferElement {
     private ShaderDataType type;
     private int size;
     private int offset;
-    private boolean normalized = false;
+    private boolean normalized = true;
 
     public BufferElement(ShaderDataType type, String name){
         this.name = name;
@@ -36,8 +36,8 @@ public class BufferElement {
         return size;
     }
 
-    public boolean isNormalized(){
-        return normalized;
+    public boolean normalize(){
+        return !normalized;
     }
 
     public int getOffset() {

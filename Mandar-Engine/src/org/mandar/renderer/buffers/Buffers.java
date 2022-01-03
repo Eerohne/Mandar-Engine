@@ -1,7 +1,7 @@
 package org.mandar.renderer.buffers;
 
 import org.mandar.debug.Debug;
-import org.mandar.exceptions.window.RendererAPINotSupportedException;
+import org.mandar.exceptions.renderer.RendererAPINotSupportedException;
 import org.mandar.renderer.Renderer;
 
 import java.nio.FloatBuffer;

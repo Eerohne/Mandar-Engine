@@ -1,4 +1,4 @@
-package org.mandar.exceptions.window;
+package org.mandar.exceptions.renderer;
 
 public class ShaderDataTypedDoesNotExistException extends RuntimeException{
     public ShaderDataTypedDoesNotExistException(String message){

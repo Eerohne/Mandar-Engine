@@ -1,4 +1,4 @@
-package org.mandar.exceptions.window;
+package org.mandar.exceptions.renderer;
 
 public class RendererAPINotSupportedException extends RuntimeException{
     public RendererAPINotSupportedException(String message){ super(message); }

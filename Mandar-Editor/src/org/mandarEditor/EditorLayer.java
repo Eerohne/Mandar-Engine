@@ -44,12 +44,12 @@ public class EditorLayer extends Layer {
 
         Debug.log("Creating entities : {0}", Time.getSystemTime());
 
-        for(int i = 0; i < 10000; i++)
+        for(int i = 0; i < 1_000; i++)
             activeScene.createEntity("Entity" + i);
 
         Debug.log("Finished creating entities : {0}", Time.getSystemTime());
 
-        if(true) {
+        if(false) {
             Debug.log("Checking entities : {0}", Time.getSystemTime());
             for (var entityHandle : activeScene.getEntityRegistry().view().keySet()) {
                 Entity ent = new Entity(entityHandle, activeScene);
