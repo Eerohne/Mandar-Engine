@@ -1,4 +1,4 @@
-package org.mandar;
+package org.mandar.core;
 
 import imgui.ImGuiIO;
 import imgui.flag.ImGuiConfigFlags;

@@ -19,4 +19,9 @@ sourceSets{
 
 dependencies {
     implementation project(':Mandar')
+    //implementation project(':SSLog')
+
+    //Dear imgui
+    implementation "io.github.spair:imgui-java-app:1.86.0"
+
 }

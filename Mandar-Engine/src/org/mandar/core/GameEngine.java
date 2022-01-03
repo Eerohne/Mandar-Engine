@@ -1,6 +1,5 @@
 package org.mandar.core;
 
-import org.mandar.ImGuiLayer;
 import org.mandar.core.window.Window;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
@@ -75,9 +74,6 @@ public class GameEngine implements Runnable, IEventListener {
         while(it.hasNext()) {
             it.next().onAttach();
         }
-
-
-        Debug.coreLog("The Engine was succesfully ported to a new git root!");
 
     }
 

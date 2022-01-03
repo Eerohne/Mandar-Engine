@@ -10,7 +10,6 @@ public class Mandar {
     public static void main(String[] args) {
 
         try{
-            //GameEngine e = new GameEngine(ENGINE_NAME, new TestLayer(), new EditorLayer());
             GameEngine e = new GameEngine(ENGINE_NAME,new TestLayer());
             e.run();
         } catch(Exception e){

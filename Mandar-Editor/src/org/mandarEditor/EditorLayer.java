@@ -1,4 +1,4 @@
-package org.mandar;
+package org.mandarEditor;
 
 import imgui.*;
 import imgui.flag.ImGuiConfigFlags;
@@ -10,6 +10,8 @@ import imgui.glfw.ImGuiImplGlfw;
 import imgui.internal.ImGui;
 import imgui.internal.ImGuiDockNode;
 import imgui.type.ImBoolean;
+
+
 import org.mandar.core.*;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
