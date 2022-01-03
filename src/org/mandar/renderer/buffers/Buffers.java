@@ -1,6 +1,7 @@
 package org.mandar.renderer.buffers;
 
 import org.mandar.debug.Debug;
+import org.mandar.exceptions.window.RendererAPINotSupportedException;
 import org.mandar.renderer.Renderer;
 
 import java.nio.FloatBuffer;
@@ -8,7 +9,7 @@ import java.nio.IntBuffer;
 
 public abstract class Buffers {
 
-    public static VertexBuffer createVertexBuffer(FloatBuffer vertices){
+    public static VertexBuffer createVertexBuffer(FloatBuffer vertices) throws RendererAPINotSupportedException {
         switch (Renderer.RENDERER_API){
             case NONE:
                 Debug.coreError("No Renderer API is specified");
@@ -17,11 +18,10 @@ public abstract class Buffers {
                 return new OpenGLBuffers().createOpenGLVertexBuffer(vertices);
         }
 
-        Debug.coreError("The Renderer API you are trying to use is not recognized by the engine");
-        return null;
+        throw new RendererAPINotSupportedException();
     }
 
-    public static IndexBuffer createIndexBuffer(IntBuffer indices, int count){
+    public static IndexBuffer createIndexBuffer(IntBuffer indices, int count) throws RendererAPINotSupportedException {
         switch (Renderer.RENDERER_API){
             case NONE:
                 Debug.coreError("No Renderer API is specified");
@@ -29,12 +29,12 @@ public abstract class Buffers {
                 return new OpenGLBuffers().createOpenGLVertexBuffer(indices, count);
         }
 
-        Debug.coreError("The Renderer API you are trying to use is not recognized by the engine");
-        return null;
+        throw new RendererAPINotSupportedException();
     }
 
     public abstract class VertexBuffer{
         protected int vertexBufferID;
+        protected BufferLayout layout;
 
         public int getVertexBufferID(){
             return vertexBufferID;
@@ -42,6 +42,13 @@ public abstract class Buffers {
 
         public abstract void bind();
         public abstract void unbind();
+
+        public void setLayout(BufferLayout layout){
+            this.layout = layout;
+        }
+        public BufferLayout getLayout(){
+            return layout;
+        }
     }
 
     public abstract class IndexBuffer{
