@@ -25,13 +25,13 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class TestLayer extends Layer {
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-             0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f//,
-            //-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
     };
 
-    int indices[] = {0,1,2};//2,1,0,0,1,3};
+    int indices[] = {3,0,1,3,1,2};
 
     Shader shader = null;
     //private Random rand = new Random();
