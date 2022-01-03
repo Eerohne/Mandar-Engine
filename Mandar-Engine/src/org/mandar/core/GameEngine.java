@@ -76,6 +76,9 @@ public class GameEngine implements Runnable, IEventListener {
             it.next().onAttach();
         }
 
+
+        Debug.coreLog("The Engine was succesfully ported to a new git root!");
+
     }
 
     private void gameLoop(){
