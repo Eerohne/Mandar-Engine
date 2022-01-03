@@ -27,7 +27,7 @@ public class TestLayer extends Layer {
     float vertices[] = {
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
              0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f//,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f//,
             //-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
     };
 
@@ -77,7 +77,7 @@ public class TestLayer extends Layer {
             glVertexAttribPointer(
                     index,
                     ShaderDataType.getDataTypeComponentCount(element.getType()),
-                    ShaderDataType.getOpenGLTypeValue(element.getType()),
+                    ShaderDataType.getDataTypeValue(element.getType()),
                     element.isNormalized(),
                     vbo.getLayout().getStride(),
                     element.getOffset()

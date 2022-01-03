@@ -1,6 +1,8 @@
 package org.mandar.renderer.shaders;
 
+import org.mandar.exceptions.window.RendererAPINotSupportedException;
 import org.mandar.exceptions.window.ShaderDataTypedDoesNotExistException;
+import org.mandar.renderer.Renderer;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_INT;
@@ -25,14 +27,19 @@ public enum ShaderDataType {
         throw new ShaderDataTypedDoesNotExistException();
     }
 
-    public static int getOpenGLTypeValue(ShaderDataType type){
-        switch (type){
-            case FLOAT: case FLOAT2: case FLOAT3: case FLOAT4: case MAT3: case MAT4:  return GL_FLOAT;
-            case INT:   case INT2:   case INT3:   case INT4:                          return GL_INT;
-            case BOOL:                                                                return GL_BOOL;
+    public static int getDataTypeValue(ShaderDataType type){
+        switch(Renderer.RENDERER_API){
+            case OPENGL:
+                switch (type){
+                    case FLOAT: case FLOAT2: case FLOAT3: case FLOAT4: case MAT3: case MAT4:  return GL_FLOAT;
+                    case INT:   case INT2:   case INT3:   case INT4:                          return GL_INT;
+                    case BOOL:                                                                return GL_BOOL;
+                }
+
+                throw new ShaderDataTypedDoesNotExistException();
         }
 
-        throw new ShaderDataTypedDoesNotExistException();
+        throw new RendererAPINotSupportedException();
     }
 
     public static int getDataTypeByteSize(ShaderDataType type){
