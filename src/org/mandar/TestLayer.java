@@ -1,19 +1,20 @@
 package org.mandar;
 
-import org.joml.Random;
 import org.lwjgl.BufferUtils;
 import org.mandar.core.Layer;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
+import org.mandar.renderer.buffers.BufferElement;
+import org.mandar.renderer.buffers.BufferLayout;
 import org.mandar.renderer.buffers.Buffers;
 import org.mandar.renderer.shaders.Shader;
+import org.mandar.renderer.shaders.ShaderDataType;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
@@ -24,13 +25,13 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class TestLayer extends Layer {
 
     float vertices[] = {
-             0.5f, -0.5f, 0.0f, //1.0f, 0.0f, 0.0f,
-            -0.5f,  0.5f, 0.0f, //1.0f, 0.0f, 0.0f,
-             0.5f,  0.5f, 0.0f, //1.0f, 0.0f, 1.0f
-            -0.5f, -0.5f, 0.0f, //1.0f, 1.0f, 0.0f,
+            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+             0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f//,
+            //-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
     };
 
-    int indices[] = {2,1,0,0,1,3};
+    int indices[] = {0,1,2};//2,1,0,0,1,3};
 
     Shader shader = null;
     //private Random rand = new Random();
@@ -60,8 +61,30 @@ public class TestLayer extends Layer {
         //Create VBO
         vbo = Buffers.createVertexBuffer(vertexBuffer);
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+        {
+            BufferLayout layout = new BufferLayout(
+                    new BufferElement(ShaderDataType.FLOAT3, "aPos"),
+                    new BufferElement(ShaderDataType.FLOAT4, "aCol")
+            );
+
+            vbo.setLayout(layout);
+        }
+
+
+        int index = 0;
+        for (BufferElement element : vbo.getLayout()){
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(
+                    index,
+                    ShaderDataType.getDataTypeComponentCount(element.getType()),
+                    ShaderDataType.getOpenGLTypeValue(element.getType()),
+                    element.isNormalized(),
+                    vbo.getLayout().getStride(),
+                    element.getOffset()
+            );
+
+            index++;
+        }
 
         IntBuffer indexBuffer = BufferUtils.createIntBuffer(indices.length);
         indexBuffer.put(indices);
