@@ -2,7 +2,6 @@ package org.mandar.renderer.buffers;
 
 import org.mandar.renderer.shaders.ShaderDataType;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -27,7 +26,7 @@ public class BufferLayout implements Iterable<BufferElement>{
 
         for(BufferElement element : elements){
             element.setOffset(offset);
-            offset += element.getSize();
+            offset += ShaderDataType.getDataTypeByteSize(element.getType());
             stride += ShaderDataType.getDataTypeByteSize(element.getType());
         }
     }

@@ -3,11 +3,11 @@ package org.mandar.renderer.buffers;
 import org.mandar.renderer.shaders.ShaderDataType;
 
 public class BufferElement {
-    private boolean normalized = false;
     private String name;
     private ShaderDataType type;
     private int size;
     private int offset;
+    private boolean normalized = false;
 
     public BufferElement(ShaderDataType type, String name){
         this.name = name;
