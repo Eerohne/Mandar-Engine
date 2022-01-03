@@ -1,2 +1,2 @@
-# Mandar Engine
-A Java Game Engine
+# Mandar-Engine
+A Java Game Engine built on top of LWJGL
