@@ -76,9 +76,6 @@ public class OpenGLWindow extends Window {
                 eventListener.onEvent(new Event.WindowResizedEvent(width, height));
             });
 
-
-
-
             //Sets key callback
             glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
                 Event keyEvent = null;
@@ -105,7 +102,6 @@ public class OpenGLWindow extends Window {
 
             //Sets mouse button callback
             glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
-
                 Event mouseButtonEvent = null;
 
                 switch (action) {

@@ -27,8 +27,6 @@ public abstract class Window {
 
     public static Window createWindow(String title, int width, int height, boolean vSync, boolean debugMode) throws WindowOutOfContextException {
         switch (Renderer.RENDERER_API){
-            case NONE:
-                return null;
             case OPENGL:
                 return new OpenGLWindow(title, width, height, vSync, debugMode);
         }

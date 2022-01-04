@@ -53,12 +53,8 @@ public class TestLayer extends Layer {
     };
 
     Shader shader = null;
-    //private Random rand = new Random();
 
     VertexAttributeArray vao;
-    Buffers.VertexBuffer vbo;
-    Buffers.IndexBuffer ibo;
-    //public float r = 1, g =0, b = 0;
 
     @Override
     public void onAttach(){ //OnStart
@@ -73,57 +69,29 @@ public class TestLayer extends Layer {
         vao = VertexAttributeArray.create();
         vao.bind();
 
-        FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.length);
-        vertexBuffer.put(vertices);
-        vertexBuffer.flip();
+        //Create VBO and IBO
+        Buffers.VertexBuffer vbo = Buffers.createVertexBuffer(BufferUtils.createFloatBuffer(vertices.length).put(vertices).flip());
+        Buffers.IndexBuffer ibo = Buffers.createIndexBuffer(BufferUtils.createIntBuffer(indices.length).put(indices).flip(), indices.length);
 
-        //Create VBO
-        vbo = Buffers.createVertexBuffer(vertexBuffer);
-
-        BufferLayout layout = new BufferLayout(
+        vbo.setLayout(new BufferLayout(
                 new BufferElement(ShaderDataType.FLOAT3, "aPos"),
                 new BufferElement(ShaderDataType.FLOAT4, "aCol")
-        );
-
-        vbo.setLayout(layout);
+        ));
         vao.addVertexBuffer(vbo);
-
-        IntBuffer indexBuffer = BufferUtils.createIntBuffer(indices.length);
-        indexBuffer.put(indices);
-        indexBuffer.flip();
-
-        ibo = Buffers.createIndexBuffer(indexBuffer, indices.length);
-
         vao.setIndexBuffer(ibo);
     }
 
     @Override
     public void update(float deltaTime) { //OnUpdate
-
-
-        //ImGui.text("Hello, World!");
-
-//        r = (float) Input.getMousePosition().x / GameEngine.engine.getWindow().getWidth();
-//        g = (float) Input.getMousePosition().y / GameEngine.engine.getWindow().getHeight();
-//        b = Input.isKeyPressed(KeyCode.G) ? 1 : 0;
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);//r, g, b ,1);
-
-
+        glClearColor(0.1f, 0.1f, 0.1f, 1f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         vao.bind();
         glDrawElements(GL_TRIANGLES, vao.getIndexBuffer().getCount(), GL_UNSIGNED_INT, 0);
-        //glDisableVertexAttribArray(0);
     }
 
-    @Override
-    public void onDetach() { //OnExit
-    }
-
-
-    @Override
-    public void onEvent(Event e) {
+    @Override public void onDetach() { //OnExit
+    } @Override public void onEvent(Event e) {
          //mark event as handled, placeholder for now
     }
 }

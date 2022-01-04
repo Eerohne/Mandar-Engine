@@ -84,12 +84,8 @@ public class GameEngine implements Runnable, IEventListener {
             Time.update();
             Time.limitedDeltaTime += Time.getDeltaTime();
 
-
-
-
             if(Time.limitedDeltaTime >= 1/updatesPerSec) {
                 update();
-                //Debug.coreLog(updateTimer);
                 Time.limitedDeltaTime = 0f;
             }
 
