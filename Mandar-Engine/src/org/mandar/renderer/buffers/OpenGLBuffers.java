@@ -19,7 +19,7 @@ public class OpenGLBuffers extends Buffers{
     public class OpenGLVertexBuffer extends VertexBuffer{
         public OpenGLVertexBuffer(FloatBuffer buffer){
             vertexBufferID = glGenBuffers();
-            this.bind();
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
             glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
         }
 
@@ -32,13 +32,18 @@ public class OpenGLBuffers extends Buffers{
         public void unbind() {
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
+
+        @Override
+        public void delete() {
+            glDeleteBuffers(vertexBufferID);
+        }
     }
 
     public class OpenGLIndexBuffer extends IndexBuffer{
         public OpenGLIndexBuffer(IntBuffer buffer, int count){
             this.indexCount = count;
             this.indexBufferID = glGenBuffers();
-            this.bind();
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
         }
 
@@ -51,5 +56,10 @@ public class OpenGLBuffers extends Buffers{
         public void unbind() {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
+
+        public void delete(){
+            glDeleteBuffers(indexBufferID);
+        }
+
     }
 }

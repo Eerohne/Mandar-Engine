@@ -34,7 +34,7 @@ public abstract class Buffers {
 
     public abstract class VertexBuffer{
         protected int vertexBufferID;
-        protected BufferLayout layout;
+        protected BufferLayout layout = new BufferLayout();
 
         public int getVertexBufferID(){
             return vertexBufferID;
@@ -42,6 +42,7 @@ public abstract class Buffers {
 
         public abstract void bind();
         public abstract void unbind();
+        public abstract void delete();
 
         public void setLayout(BufferLayout layout){
             this.layout = layout;
@@ -65,5 +66,6 @@ public abstract class Buffers {
 
         public abstract void bind();
         public abstract void unbind();
+        public abstract void delete();
     }
 }

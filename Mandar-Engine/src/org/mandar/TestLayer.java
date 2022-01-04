@@ -4,6 +4,7 @@ import org.lwjgl.BufferUtils;
 import org.mandar.core.Layer;
 import org.mandar.debug.Debug;
 import org.mandar.event.Event;
+import org.mandar.renderer.buffers.VertexAttributeArray;
 import org.mandar.renderer.buffers.BufferElement;
 import org.mandar.renderer.buffers.BufferLayout;
 import org.mandar.renderer.buffers.Buffers;
@@ -15,8 +16,6 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 
@@ -24,19 +23,39 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class TestLayer extends Layer {
 
+//    float vertices[] = {
+//            -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+//             0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+//             0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+//            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+//             0.0f,  0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+//    };
+//
+//    int indices[] = {//3,0,1,3,1,2};
+//        3,0,4,
+//        0,1,4,
+//        4,1,2,
+//        3,4,2
+//    };
+
     float vertices[] = {
             -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
              0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
     };
 
-    int indices[] = {3,0,1,3,1,2};
+    int indices[] = {//3,0,1,3,1,2};
+            0, 1, 2,
+            3, 4, 5
+    };
 
     Shader shader = null;
     //private Random rand = new Random();
 
-    int vaoID;
+    VertexAttributeArray vao;
     Buffers.VertexBuffer vbo;
     Buffers.IndexBuffer ibo;
     //public float r = 1, g =0, b = 0;
@@ -51,8 +70,8 @@ public class TestLayer extends Layer {
         shader.attach();
 
         //Create VAO
-        vaoID = glGenVertexArrays();
-        glBindVertexArray(vaoID);
+        vao = VertexAttributeArray.create();
+        vao.bind();
 
         FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.length);
         vertexBuffer.put(vertices);
@@ -61,36 +80,21 @@ public class TestLayer extends Layer {
         //Create VBO
         vbo = Buffers.createVertexBuffer(vertexBuffer);
 
-        {
-            BufferLayout layout = new BufferLayout(
-                    new BufferElement(ShaderDataType.FLOAT3, "aPos"),
-                    new BufferElement(ShaderDataType.FLOAT4, "aCol")
-            );
+        BufferLayout layout = new BufferLayout(
+                new BufferElement(ShaderDataType.FLOAT3, "aPos"),
+                new BufferElement(ShaderDataType.FLOAT4, "aCol")
+        );
 
-            vbo.setLayout(layout);
-        }
-
-
-        int index = 0;
-        for (BufferElement element : vbo.getLayout()){
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(
-                    index,
-                    ShaderDataType.getDataTypeComponentCount(element.getType()),
-                    ShaderDataType.getDataTypeValue(element.getType()),
-                    element.normalize(),
-                    vbo.getLayout().getStride(),
-                    element.getOffset()
-            );
-
-            index++;
-        }
+        vbo.setLayout(layout);
+        vao.addVertexBuffer(vbo);
 
         IntBuffer indexBuffer = BufferUtils.createIntBuffer(indices.length);
         indexBuffer.put(indices);
         indexBuffer.flip();
 
         ibo = Buffers.createIndexBuffer(indexBuffer, indices.length);
+
+        vao.setIndexBuffer(ibo);
     }
 
     @Override
@@ -108,8 +112,8 @@ public class TestLayer extends Layer {
 
 
 
-        glBindVertexArray(vaoID);
-        glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_INT, 0);
+        vao.bind();
+        glDrawElements(GL_TRIANGLES, vao.getIndexBuffer().getCount(), GL_UNSIGNED_INT, 0);
         //glDisableVertexAttribArray(0);
     }
 
