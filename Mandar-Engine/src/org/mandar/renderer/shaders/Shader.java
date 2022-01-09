@@ -1,12 +1,14 @@
 package org.mandar.renderer.shaders;
 
+import org.mandar.plateform.opengl.shaders.OpenGLShader;
 import org.mandar.renderer.Renderer;
+import org.mandar.renderer.RendererAPI;
 
 public abstract class Shader {
     protected int programID;
 
     public static Shader create(String srcPath){
-        switch (Renderer.RENDERER_API){
+        switch (RendererAPI.getRendererAPI()){
             case OPENGL:
                 return new OpenGLShader(srcPath);
         }

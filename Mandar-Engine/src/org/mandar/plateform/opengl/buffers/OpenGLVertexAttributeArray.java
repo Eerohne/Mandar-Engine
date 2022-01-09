@@ -1,6 +1,9 @@
-package org.mandar.renderer.buffers;
+package org.mandar.plateform.opengl.buffers;
 
 import org.mandar.exceptions.renderer.VertexBufferWithNoLayoutException;
+import org.mandar.renderer.buffers.BufferElement;
+import org.mandar.renderer.buffers.Buffers;
+import org.mandar.renderer.buffers.VertexAttributeArray;
 import org.mandar.renderer.shaders.ShaderDataType;
 
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;

@@ -2,7 +2,8 @@ package org.mandar.renderer.buffers;
 
 import org.mandar.debug.Debug;
 import org.mandar.exceptions.renderer.RendererAPINotSupportedException;
-import org.mandar.renderer.Renderer;
+import org.mandar.plateform.opengl.buffers.OpenGLBuffers;
+import org.mandar.renderer.RendererAPI;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -10,7 +11,7 @@ import java.nio.IntBuffer;
 public abstract class Buffers {
 
     public static VertexBuffer createVertexBuffer(FloatBuffer vertices) throws RendererAPINotSupportedException {
-        switch (Renderer.RENDERER_API){
+        switch (RendererAPI.getRendererAPI()){
             case NONE:
                 Debug.coreError("No Renderer API is specified");
                 break;
@@ -22,7 +23,7 @@ public abstract class Buffers {
     }
 
     public static IndexBuffer createIndexBuffer(IntBuffer indices, int count) throws RendererAPINotSupportedException {
-        switch (Renderer.RENDERER_API){
+        switch (RendererAPI.getRendererAPI()){
             case NONE:
                 Debug.coreError("No Renderer API is specified");
             case OPENGL:

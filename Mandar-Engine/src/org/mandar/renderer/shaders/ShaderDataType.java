@@ -3,6 +3,7 @@ package org.mandar.renderer.shaders;
 import org.mandar.exceptions.renderer.RendererAPINotSupportedException;
 import org.mandar.exceptions.renderer.ShaderDataTypedDoesNotExistException;
 import org.mandar.renderer.Renderer;
+import org.mandar.renderer.RendererAPI;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_INT;
@@ -28,7 +29,7 @@ public enum ShaderDataType {
     }
 
     public static int getDataTypeValue(ShaderDataType type){
-        switch(Renderer.RENDERER_API){
+        switch(RendererAPI.getRendererAPI()){
             case OPENGL:
                 switch (type){
                     case FLOAT: case FLOAT2: case FLOAT3: case FLOAT4: case MAT3: case MAT4:  return GL_FLOAT;

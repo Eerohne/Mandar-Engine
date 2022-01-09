@@ -1,4 +1,6 @@
-package org.mandar.renderer.buffers;
+package org.mandar.plateform.opengl.buffers;
+
+import org.mandar.renderer.buffers.Buffers;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -6,7 +8,7 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL45.glCreateBuffers;
 
-public class OpenGLBuffers extends Buffers{
+public class OpenGLBuffers extends Buffers {
 
     public VertexBuffer createOpenGLVertexBuffer(FloatBuffer buffer){
         return new OpenGLVertexBuffer(buffer);

@@ -1,7 +1,8 @@
 package org.mandar.renderer.buffers;
 
 import org.mandar.exceptions.renderer.RendererAPINotSupportedException;
-import org.mandar.renderer.Renderer;
+import org.mandar.plateform.opengl.buffers.OpenGLVertexAttributeArray;
+import org.mandar.renderer.RendererAPI;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public abstract class VertexAttributeArray {
     protected Buffers.IndexBuffer indexBuffer;
 
     public static VertexAttributeArray create() throws RendererAPINotSupportedException{
-        switch (Renderer.RENDERER_API){
+        switch (RendererAPI.getRendererAPI()){
             case OPENGL:
                 return new OpenGLVertexAttributeArray();
         }

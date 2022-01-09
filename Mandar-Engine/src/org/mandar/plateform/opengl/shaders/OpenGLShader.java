@@ -1,4 +1,4 @@
-package org.mandar.renderer.shaders;
+package org.mandar.plateform.opengl.shaders;
 
 import org.mandar.debug.Debug;
 import org.mandar.renderer.shaders.Shader;

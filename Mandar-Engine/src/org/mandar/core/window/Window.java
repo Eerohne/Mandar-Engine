@@ -3,6 +3,7 @@ package org.mandar.core.window;
 import org.mandar.event.IEventListener;
 import org.mandar.exceptions.window.WindowOutOfContextException;
 import org.mandar.renderer.Renderer;
+import org.mandar.renderer.RendererAPI;
 
 public abstract class Window {
     protected String title;
@@ -26,7 +27,7 @@ public abstract class Window {
     }
 
     public static Window createWindow(String title, int width, int height, boolean vSync, boolean debugMode) throws WindowOutOfContextException {
-        switch (Renderer.RENDERER_API){
+        switch (RendererAPI.getRendererAPI()){
             case OPENGL:
                 return new OpenGLWindow(title, width, height, vSync, debugMode);
         }

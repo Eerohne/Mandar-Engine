@@ -1,16 +1,17 @@
 package org.mandar.renderer;
 
 
+import org.mandar.debug.Debug;
+import org.mandar.exceptions.renderer.RendererAPINotSupportedException;
+
 public abstract class Renderer {
-    public enum RenderingAPI { NONE, OPENGL }
+    public abstract void init();
 
-    public static RenderingAPI RENDERER_API = RenderingAPI.OPENGL;
+    public abstract void push();
 
-    abstract void init();
+    public static Renderer createRenderer() throws RendererAPINotSupportedException{
 
-    abstract void push();
 
-    public static Renderer createRenderer(){
-        return null;
+        throw new RendererAPINotSupportedException();
     }
 }
